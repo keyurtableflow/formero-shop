@@ -1,0 +1,86 @@
+<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent">
+
+    <div
+        class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-8 px-6 md:px-8 border-b">
+
+        <div class="absolute inset-x-0 bottom-0" *ngIf="isLoading">
+            <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
+        </div>
+        <div class="text-4xl font-extrabold tracking-tight">Project Wizard</div>
+        <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4">
+            <mat-form-field class="fuse-mat-dense fuse-mat-rounded min-w-64" [subscriptSizing]="'dynamic'">
+                <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:magnifying-glass'"></mat-icon>
+                <input matInput [formControl]="searchInputControl" [autocomplete]="'off'"
+                    [placeholder]="'Search Project Wizard'" (input)="searchRecord()">
+            </mat-form-field>
+            <button class="ml-4 text-white bg-[#00E0AC]" mat-flat-button (click)="redirectToAddProjectWizard()">
+                <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                <span class="ml-2 mr-1">Add</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="flex flex-auto overflow-hidden">
+        <div class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto">
+            <div class="grid">
+                <div class="projectWizard-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                    matSort matSortDisableClear (matSortChange)="sortData($event)">
+                    <div class="hidden md:block" [mat-sort-header]="'name'">
+                        Name
+                    </div>
+                    <div class="hidden sm:block" [mat-sort-header]="'status'">
+                        Status
+                    </div>
+                    <div class="hidden lg:block">
+                        Action
+                    </div>
+                </div>
+                <ng-container *ngIf="sortedData && sortedData.length > 0">
+                    <ng-container *ngFor="let projectWizard of sortedData; trackBy: trackByFn">
+                        <div class="projectWizard-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
+
+                            <div class="flex items-center">
+                                <div class="hidden md:block truncate">
+                                    {{projectWizard.name }}
+                                </div>
+                            </div>
+
+                            <div class="hidden md:block truncate">
+                                {{ projectWizard.status ? 'Active' : 'Inactive' }}
+                            </div>
+
+                            <div class="">
+                                <button mat-icon-button [matMenuTriggerFor]="summaryMenu">
+                                    <mat-icon class="icon-size-5"
+                                        [svgIcon]="'heroicons_mini:ellipsis-vertical'"></mat-icon>
+                                </button>
+                                <mat-menu #summaryMenu="matMenu">
+                                    <button mat-menu-item (click)="editProjectWizard(projectWizard._id)">
+                                        <mat-icon svgIcon="feather:edit-2" color="accent"
+                                            class="icon-size-4"></mat-icon>
+                                        Edit</button>
+                                    <button mat-menu-item color="warn" (click)="deleteProjectWizard(projectWizard._id)">
+                                        <mat-icon svgIcon="feather:trash-2" color="warn" class="icon-size-4"></mat-icon>
+                                        <span class="text-warn">Delete</span></button>
+                                </mat-menu>
+                            </div>
+                        </div>
+
+                    </ng-container>
+                </ng-container>
+                <ng-container *ngIf="sortedData.length == 0">
+                    <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">There are no
+                        project wizard</div>
+                </ng-container>
+
+                <mat-paginator
+                    class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
+                    [ngClass]="{'pointer-events-none': isLoading}" [length]="totalRecords" [pageIndex]="currentPage"
+                    (page)="onPageChange($event)" (pageSizeChange)="onPageSizeChange($event)" [pageSize]="pageSize"
+                    [pageSizeOptions]="[5, 10, 25, 100]" [showFirstLastButtons]="true"></mat-paginator>
+            </div>
+        </div>
+
+    </div>
+
+</div>

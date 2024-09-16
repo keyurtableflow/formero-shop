@@ -1,0 +1,911 @@
+<div class="absolute inset-0 flex flex-col min-w-0 p-3 sm:p-6 overflow-y-auto order_details_block" cdkScrollable>
+    <div class="grid grid-cols-12 gap-2">
+        <div class="px-1 col-span-12 lg:col-span-8 xl:col-span-9 od__order-details">
+            <div class="sm:col-span-6 p-5 flex flex-col flex-auto bg-card shadow overflow-hidden">
+                <div class="tracking-tight leading-6 truncate">
+                    <div class="shadow-sm">
+                        <div class="flex justify-between items-center cursor-pointer rounded-lg"
+                            (click)="toggleAccordion()">
+                            <div class="text-xl font-bold">Your Order</div>
+                            <div class="flex items-center space-x-2">
+                                <div class="text-xl underline text-content">
+                                    {{ models.length }}
+                                    {{ models.length > 1 ? "models" : "model" }}
+                                </div>
+                                <svg class="w-5 h-5 transform transition-transform duration-200"
+                                    [ngClass]="{ 'rotate-180': isOpen }" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </div>
+                        </div>
+
+                        <div *ngIf="isOpen" class="mt-6 bg-white border-gray-200 rounded-b-lg">
+                            <div
+                                class="relative flex flex-col w-full h-full text-gray-700 bg-white shadow-md rounded-xl bg-clip-border">
+                                <div class="p-6 px-0 overflow-scroll">
+                                    <table class="w-full text-left table-auto min-w-max border">
+                                        <tbody>
+                                            <tr *ngFor="
+                                                    let model of models;
+                                                    let i = index
+                                                ">
+                                                <td>
+                                                    <table class="w-full text-left table-auto min-w-max border-none">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td class="p-4 border-blue-gray-50" colspan="3">
+                                                                    <div
+                                                                        class="font-bold text-lg h-16 w-16 bg-gray-100 flex justify-center items-center">
+                                                                        <img [src]="model?.thumbnail" alt="">
+                                                                    </div>
+                                                                </td>
+                                                                <td *ngIf="!isAllfieldDisabled" class="p-4 pr-0 border-blue-gray-50 text-right"
+                                                                    colspan="2">
+                                                                    <span class="ml-3 leading-4 sm:mr-4">
+                                                                        <button mat-flat-button class="p-0" (click)="
+                                                                                removeItem(
+                                                                                    model._id
+                                                                                )
+                                                                            ">
+                                                                            <mat-icon class="icon-size-5" [svgIcon]="
+                                                                                    'mat_solid:delete_outline'
+                                                                                "></mat-icon>
+                                                                            <span
+                                                                                class="ml-2 hidden sm:block">Remove</span>
+                                                                        </button>
+                                                                    </span>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="p-4 border-b border-blue-gray-50"
+                                                                    valign="top">
+                                                                    <div class="flex flex-col justify-between" style="
+                                                                            height: 160px;
+                                                                        ">
+                                                                        <div class="d-flex">
+                                                                            <div class="text-lg font-bold">
+                                                                                {{
+                                                                                getModelName(model.model)
+                                                                                }}
+                                                                            </div>
+                                                                            <!-- {{model | json}} -->
+                                                                            <div class="text-md underline mt-2 flex items-center"
+                                                                                *ngIf="
+                                                                                    model.modelWallThickness
+                                                                                ">
+                                                                                <mat-icon
+                                                                                    class="icon-size-5 text-yellow-400 mr-1"
+                                                                                    [svgIcon]="
+                                                                                        'mat_solid:warning_amber'
+                                                                                    "></mat-icon>
+                                                                                Model wall thickness too thin
+                                                                            </div>
+                                                                            <div class="require_review_container" *ngIf="model.require_review">
+                                                                                <div
+                                                                                class="wroning-msg bg-white p-2 border border-[#FFB200] rounded-[4px] inline-block mt-2">
+                                                                                <p class="text-[14px] leading-[20px] text-[#222B4E]">
+                                                                                    <mat-icon
+                                                                                        class="warning-icon min-h-[18px] h-[18px]"
+                                                                                        svgIcon="mat_outline:warning_amber"
+                                                                                    ></mat-icon>
+                                                                                    <span>The selected process will require a review by the team at Formero.</span>
+                                                                                </p>
+                                                                            </div>
+                                                                            </div>
+                                                                        </div>
+                                                                          
+                                                                        <!-- <div class="d-flex">
+                                                                            <span>{{
+                                                                                model.price /
+                                                                                model.quantity
+                                                                                | currency
+                                                                                }}
+                                                                                per part
+                                                                            </span>
+                                                                        </div> -->
+                                                                    </div>
+                                                                </td>
+                                                                <td class="p-4 border-b border-blue-gray-50"
+                                                                    valign="top">
+                                                                    <ul>
+                                                                        <li>
+                                                                            Process:
+                                                                        </li>
+                                                                        <li>
+                                                                            Material:
+                                                                        </li>
+                                                                        <li>
+                                                                            Finish:
+                                                                        </li>
+                                                                        <li>
+                                                                            Extras:
+                                                                        </li>
+                                                                    </ul>
+                                                                </td>
+                                                                <td class="p-4 border-b border-blue-gray-50"
+                                                                    valign="top">
+                                                                    <ul>
+                                                                        <li>
+                                                                            {{
+                                                                            model
+                                                                            ?.processData
+                                                                            .process_name ||
+                                                                            "-"
+                                                                            }}
+                                                                        </li>
+                                                                        <li>
+                                                                            {{
+                                                                            model
+                                                                            ?.materialData
+                                                                            .material_name ||
+                                                                            "-"
+                                                                            }}
+                                                                        </li>
+                                                                        <ul>
+                                                                            <ng-container *ngFor="
+                                                                                    let item of model.finishesData
+                                                                                ">
+                                                                                <li>
+                                                                                    {{
+                                                                                    item.finishing_name
+                                                                                    }}
+                                                                                </li>
+                                                                            </ng-container>
+                                                                        </ul>
+
+                                                                        <ul>
+                                                                            <ng-container *ngFor="
+                                                                                    let item of model.extrasData
+                                                                                ">
+                                                                                <li>
+                                                                                    {{
+                                                                                    item.name
+                                                                                    }}
+                                                                                </li>
+                                                                            </ng-container>
+                                                                        </ul>
+
+                                                                    </ul>
+                                                                </td>
+                                                                <td class="p-4 border-b border-blue-gray-50"
+                                                                    valign="top">
+                                                                    <div class="w-max">
+                                                                        <div
+                                                                            class="flex items-center space-x-2 font-bold">
+                                                                            <span class="text-md font-bold">Qty.</span>
+                                                                            <div class="quantity-form">
+                                                                                <input
+                                                                                    class="quantity w-20 h-12 border rounded text-center"
+                                                                                    type="number" name="quantity" [disabled]="isAllfieldDisabled"
+                                                                                    [value]="
+                                                                                        model.quantity
+                                                                                    " min="1" />
+                                                                                <mat-icon (click)="
+                                                                                        keyDown(
+                                                                                            model
+                                                                                        )
+                                                                                    "
+                                                                                    class="qty-plus">keyboard_arrow_down</mat-icon>
+                                                                                <mat-icon class="qty-minus" (click)="
+                                                                                        keyUp(
+                                                                                            model
+                                                                                        )
+                                                                                    ">keyboard_arrow_up</mat-icon>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                                <td class="border-b border-blue-gray-50" valign="top"
+                                                                    style="
+                                                                        padding-top: 25px;
+                                                                    ">
+                                                                    <span *ngIf="isProcessInstantQuote" class="text-md font-bold">{{
+                                                                        model.price
+                                                                        | currency
+                                                                        }}</span>
+                                                                    <span *ngIf="!isProcessInstantQuote" class="text-md font-bold">TBD</span>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6">
+                <div class="sm:col-span-6 flex flex-col flex-auto p-6 bg-card shadow overflow-hidden">
+                    <div class="text-xl sm:mb-4 font-bold tracking-tight leading-6 truncate">
+                        Contact details
+                    </div>
+
+                    <div class="flex flex-col flex-auto mt-2 overflow-x-auto">
+                        <form [formGroup]="contactForm" class="flex flex-col items-start w-full"
+                            #contactNgForm="ngForm">
+                            <div
+                                class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4 mb-4 w-full">
+                                <div class="col-span-1">
+                                    <mat-form-field class="w-full fuse-mat-dense">
+                                        <mat-label class="font-bold">First name</mat-label>
+                                        <input matInput [formControlName]="'first_name'" />
+                                        <mat-error *ngIf="
+                                                contactForm
+                                                    .get('first_name')
+                                                    .hasError('required')
+                                            ">First name is required!</mat-error>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-span-1">
+                                    <mat-form-field class="w-full fuse-mat-dense">
+                                        <mat-label class="font-bold">Last name</mat-label>
+                                        <input matInput [formControlName]="'last_name'" />
+                                        <mat-error *ngIf="
+                                                contactForm
+                                                    .get('last_name')
+                                                    .hasError('required')
+                                            ">Last name is required!</mat-error>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-span-1">
+                                    <mat-form-field class="w-full fuse-mat-dense">
+                                        <mat-label class="font-bold">Email address</mat-label>
+                                        <input matInput [formControlName]="'email'" />
+                                        <mat-error *ngIf="
+                                                contactForm
+                                                    .get('email')
+                                                    .hasError('required')
+                                            ">Email is required</mat-error>
+                                        <mat-error *ngIf="
+                                                contactForm
+                                                    .get('email')
+                                                    .hasError('email')
+                                            ">Please enter a valid
+                                            email.</mat-error>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-span-1">
+                                    <mat-form-field class="w-full fuse-mat-dense">
+                                        <mat-label class="font-bold">Phone number</mat-label>
+                                        <input matInput [formControlName]="'phone_number'" />
+                                        <mat-error *ngIf="
+                                                contactForm
+                                                    .get('phone_number')
+                                                    .hasError('required')
+                                            ">Phone is required!</mat-error>
+                                        <mat-error *ngIf="
+                                                contactForm
+                                                    .get('phone_number')
+                                                    .hasError('pattern')
+                                            ">Enter a valid phone
+                                            number</mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <div class="w-full">
+                                <div class="text-lg font-bold tracking-tight leading-2 truncate">
+                                    Additional contact email addresses
+                                    <span class="text-slate-400 font-normal">(optional)
+                                    </span>
+                                </div>
+                                <p class="mt-2 tetxt-sm text-slate-400">
+                                    Include additional contacts in email
+                                    communication about this order.
+                                    Comma-separate multiple email addresses.
+                                </p>
+                                <mat-form-field class="w-full mt-2 fuse-mat-dense">
+                                    <input  matInput [formControlName]="'additional_email'"
+                                        placeholder="Enter an email..." />
+                                </mat-form-field>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6">
+                <div class="sm:col-span-6 flex flex-col flex-auto p-6 bg-card shadow overflow-hidden">
+                    <div class="text-xl sm:mb-4 font-bold tracking-tight leading-6 truncate">
+                        Delivery
+                    </div>
+
+                    <div class="flex h-20">
+                        <div class="w-1/2 p-4 border-2 hover:cursor-pointer" [ngClass]="{
+                                'bg-card border-[#00E0AC] bg-[#ecfefa] pointer-events-none shadow':
+                                    localPickup,
+                                'bg-transparent': !localPickup
+                            }" (click)="
+                                toggleDieliveryType(true);
+                                toggleBillingAddress();
+                                updateDeliveryFee('LocalPickUp')
+                            ">
+                            <div>
+                                <mat-icon class="icon-size-6" [svgIcon]="'feather:shopping-bag'"></mat-icon>
+                            </div>
+                            <div class="font-bold">Local pick up</div>
+                        </div>
+                        <div class="p-4 w-1/2 border-2 hover:cursor-pointer" [ngClass]="{
+                                'bg-card border-[#00E0AC] bg-[#ecfefa] pointer-events-none shadow':
+                                    !localPickup,
+                                'bg-transparent': localPickup
+                            }" (click)="
+                                toggleDieliveryType(false);
+                                toggleBillingAddress();
+                                updateDeliveryMethod()
+                            ">
+                            <div>
+                                <mat-icon class="icon-size-6" [svgIcon]="'mat_outline:local_shipping'"></mat-icon>
+                            </div>
+                            <div class="font-bold">Ship to address</div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4" *ngIf="localPickup">
+                        <p class="text-lg font-bold">Pick up address</p>
+                        <p class="underline flex items-center mt-1">
+                            <mat-icon class="icon-size-6" [svgIcon]="'mat_outline:location_on'"></mat-icon>
+                            30-32 Ceylon St, Nunawading, VIC 3131, Australia
+                        </p>
+                    </div>
+
+                    <div class="mt-4" *ngIf="!localPickup">
+                        <div class="flex flex-col flex-auto mt-2 overflow-x-auto">
+                            <form [formGroup]="localPickupForm" class="flex flex-col items-start w-full"
+                                #contactNgForm="ngForm">
+                                <div class="w-full sm:w-1/4 sm:pr-3">
+                                    <mat-form-field class="w-full fuse-mat-dense">
+                                        <mat-label class="font-bold">Company name
+                                            <span class="text-slate-400 font-normal">(optional)</span></mat-label>
+                                        <input matInput formControlName="company_name" />
+                                        <mat-error *ngIf="localPickupForm
+                                                    .get('company_name')
+                                                    .hasError('required')
+                                            ">Company is required!</mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div
+                                    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 mb-4 w-full">
+                                    <div class="col-span-1">
+                                        <mat-form-field class="w-full fuse-mat-dense">
+                                            <mat-label class="font-bold">Address line 1</mat-label>
+                                            <input matInput formControlName="street_1" />
+                                            <mat-error *ngIf="
+                                                    localPickupForm
+                                                        .get('street_1')
+                                                        .hasError('required')
+                                                ">Address line 1 is
+                                                required!</mat-error>
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div class="col-span-1">
+                                        <mat-form-field class="w-full fuse-mat-dense">
+                                            <mat-label class="font-bold">Address line 2
+                                                <span class="text-slate-400 font-normal">(optional)</span></mat-label>
+                                            <input matInput formControlName="street_2" />
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div class="col-span-1">
+                                        <mat-form-field class="w-full fuse-mat-dense">
+                                            <mat-label class="font-bold">City</mat-label>
+                                            <input matInput formControlName="city" />
+                                            <mat-error *ngIf="
+                                                    localPickupForm
+                                                        .get('city')
+                                                        .hasError('required')
+                                                ">City is required!</mat-error>
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div class="col-span-1">
+                                        <mat-form-field class="w-full fuse-mat-dense">
+                                            <mat-label class="font-bold">Postal code</mat-label>
+                                            <input matInput formControlName="pincode" />
+                                            <mat-error *ngIf="
+                                                    localPickupForm
+                                                        .get('pincode')
+                                                        .hasError('required')
+                                                ">Postal Code is
+                                                required!</mat-error>
+                                            <mat-error *ngIf="
+                                                    localPickupForm
+                                                        .get('pincode')
+                                                        .hasError('pattern')
+                                                ">Enter a valid postal
+                                                code!</mat-error>
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div class="col-span-1">
+                                        <mat-form-field class="w-full fuse-mat-dense">
+                                            <mat-label class="font-bold">Country</mat-label>
+                                            <input type="text" placeholder="Pick Country" aria-label="Number" matInput
+                                                [formControlName]="'country'" [matAutocomplete]="auto" />
+                                            <mat-autocomplete #auto="matAutocomplete" autoActiveFirstOption
+                                                (optionSelected)="
+                                                    selectedCountry($event)
+                                                ">
+                                                <mat-option *ngFor="
+                                                        let country of filteredOptions
+                                                            | async
+                                                    " [value]="country.name">{{
+                                                    country.name
+                                                    }}</mat-option>
+                                            </mat-autocomplete>
+                                            <mat-error *ngIf="
+                                                    localPickupForm
+                                                        .get('country')
+                                                        .hasError('required')
+                                                ">Country is required!</mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 w-full">
+                                    <mat-radio-group class="w-full" [color]="'primary'"
+                                        formControlName="shipping_method">
+                                        <div class="border p-2 flex justify-between items-center">
+                                            <mat-radio-button class="mb-2 shipment-col" [value]="'Standard'">
+                                                <p class="text-lg font-bold">
+                                                    Standard
+                                                </p>
+                                                <p>Delivered in 1-2 days</p>
+                                            </mat-radio-button>
+                                            <p class="text-lg font-bold">
+                                                $35.00
+                                            </p>
+                                        </div>
+                                        <div class="border p-2 flex justify-between items-center">
+                                            <mat-radio-button class="mb-2" [value]="'RoadExpress'">
+                                                <p class="text-lg font-bold">
+                                                    Road express
+                                                </p>
+                                                <p>Delivered next day</p>
+                                            </mat-radio-button>
+                                            <p class="text-lg font-bold">
+                                                $45.00
+                                            </p>
+                                        </div>
+                                    </mat-radio-group>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6">
+                <div class="sm:col-span-6 flex flex-col flex-auto p-6 bg-card shadow overflow-hidden">
+                    <div class="text-xl sm:mb-4 font-bold tracking-tight leading-6 truncate">
+                        Billing details
+                    </div>
+
+                    <div *ngIf="!isAllfieldDisabled" class="flex flex-col -ml-2">
+                        <mat-checkbox class="mb-3" [(ngModel)]="isBillingContactSame"
+                            (change)="onBillingContatChange($event)" [color]="'primary'">
+                            <span class="font-bold">Billing contact same as order contact
+                                details</span>
+                        </mat-checkbox>
+                    </div>
+
+                    <div>
+                        <form [formGroup]="billingContactForm" class="flex flex-col items-start w-full"
+                            #contactNgForm="ngForm">
+                            <div class="w-full sm:w-1/4 sm:pr-3">
+                                <mat-form-field class="w-full fuse-mat-dense">
+                                    <mat-label class="font-bold">Company name
+                                        <span class="text-slate-400 font-normal">(optional)</span></mat-label>
+                                    <input matInput formControlName="company_name" />
+                                    <mat-error *ngIf="
+                                            billingContactForm
+                                                .get('company_name')
+                                                .hasError('company_name')
+                                        ">Company name is required!</mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <div
+                                class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 mb-4 w-full">
+                                <div class="col-span-1">
+                                    <mat-form-field class="w-full fuse-mat-dense">
+                                        <mat-label class="font-bold">First name</mat-label>
+                                        <input matInput [formControlName]="'first_name'" />
+                                        <mat-error *ngIf="
+                                                billingContactForm
+                                                    .get('first_name')
+                                                    .hasError('required')
+                                            ">First name is required!</mat-error>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-span-1">
+                                    <mat-form-field class="w-full fuse-mat-dense">
+                                        <mat-label class="font-bold">Last name</mat-label>
+                                        <input matInput [formControlName]="'last_name'" />
+                                        <mat-error *ngIf="
+                                                billingContactForm
+                                                    .get('last_name')
+                                                    .hasError('required')
+                                            ">Last name is required!</mat-error>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-span-1">
+                                    <mat-form-field class="w-full fuse-mat-dense">
+                                        <mat-label class="font-bold">Email address</mat-label>
+                                        <input matInput [formControlName]="'email'" />
+                                        <mat-error *ngIf="
+                                                billingContactForm
+                                                    .get('email')
+                                                    .hasError('required')
+                                            ">Email is required</mat-error>
+                                        <mat-error *ngIf="
+                                                billingContactForm
+                                                    .get('email')
+                                                    .hasError('email')
+                                            ">Please enter a valid
+                                            email.</mat-error>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-span-1">
+                                    <mat-form-field class="w-full fuse-mat-dense">
+                                        <mat-label class="font-bold">Phone number</mat-label>
+                                        <input matInput [formControlName]="'phone_number'" />
+                                        <mat-error *ngIf="
+                                                billingContactForm
+                                                    .get('phone_number')
+                                                    .hasError('required')
+                                            ">Phone is required!</mat-error>
+                                        <mat-error *ngIf="
+                                                billingContactForm
+                                                    .get('phone_number')
+                                                    .hasError('pattern')
+                                            ">Enter a valid phone
+                                            number</mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="flex flex-col -ml-2 pt-3 border-t" *ngIf="!localPickup">
+                        <ng-container *ngIf="!isAllfieldDisabled">
+                            <mat-checkbox class="mb-3 mt-4" [(ngModel)]="isBillingAddressSame"
+                            (change)="onBillingAddressChange($event)" [color]="'primary'">
+                                <span class="font-bold">Billing address same as order delivery
+                                details</span>
+                            </mat-checkbox>
+                        </ng-container>
+                    </div>
+
+                    <div>
+                        <form [formGroup]="billingAddressForm" class="flex flex-col items-start w-full"
+                            #contactNgForm="ngForm">
+                            <div
+                                class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 mb-4 w-full">
+                                <div class="col-span-1">
+                                    <mat-form-field class="w-full fuse-mat-dense">
+                                        <mat-label class="font-bold">Address Line 1</mat-label>
+                                        <input matInput formControlName="street_1" />
+                                        <mat-error *ngIf="
+                                                billingAddressForm
+                                                    .get('street_1')
+                                                    .hasError('required')
+                                            ">Address Line 1 is
+                                            required!</mat-error>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-span-1">
+                                    <mat-form-field class="w-full fuse-mat-dense">
+                                        <mat-label class="font-bold">Address Line 2</mat-label>
+                                        <input matInput formControlName="street_2" />
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-span-1">
+                                    <mat-form-field class="w-full fuse-mat-dense">
+                                        <mat-label class="font-bold">City</mat-label>
+                                        <input matInput formControlName="city" />
+                                        <mat-error *ngIf="
+                                                billingAddressForm
+                                                    .get('city')
+                                                    .hasError('required')
+                                            ">City is required!</mat-error>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-span-1">
+                                    <mat-form-field class="w-full fuse-mat-dense">
+                                        <mat-label class="font-bold">Postal Code</mat-label>
+                                        <input matInput formControlName="pincode" />
+                                        <mat-error *ngIf="
+                                                billingAddressForm
+                                                    .get('pincode')
+                                                    .hasError('required')
+                                            ">Postal Code is required!</mat-error>
+                                        <mat-error *ngIf="
+                                                billingAddressForm
+                                                    .get('pincode')
+                                                    .hasError('pattern')
+                                            ">Enter a valid postal
+                                            code!</mat-error>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-span-1">
+                                    <mat-form-field class="w-full fuse-mat-dense">
+                                        <mat-label class="font-bold">Country</mat-label>
+                                        <input type="text" placeholder="Pick Country" aria-label="Number" matInput
+                                            [formControlName]="'country'" [matAutocomplete]="auto2" />
+                                        <mat-autocomplete #auto2="matAutocomplete" autoActiveFirstOption
+                                            (optionSelected)="
+                                                selectCountryBilling($event)
+                                            ">
+                                            <mat-option *ngFor="
+                                                    let country of countryBillingFilterOption
+                                                        | async
+                                                " [value]="country.name">{{ country.name }}</mat-option>
+                                        </mat-autocomplete>
+                                        <mat-error *ngIf="
+                                                billingAddressForm
+                                                    .get('country')
+                                                    .hasError('required')
+                                            ">Country is required!</mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6">
+                <div class="sm:col-span-6 flex flex-col flex-auto p-6 bg-card shadow overflow-hidden">
+                    <div class="text-xl sm:mb-4 font-bold tracking-tight leading-6 truncate">
+                        Notes
+                    </div>
+
+                    <div class="mt-2">
+                        <div class="font-bold">
+                            Additional notes for our team
+                            <span class="text-slate-400 font-normal">
+                                (optional)</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col flex-auto mt-2 overflow-x-auto">
+                        <mat-form-field class="w-full">
+                            <textarea [disabled]="isAllfieldDisabled" matInput placeholder="Put your notes here if necessary (link allowed)"
+                                [(ngModel)]="notes"></textarea>
+                        </mat-form-field>
+                    </div>
+
+                    <div *ngIf="documents.length > 0" class="my-3">
+                        <h3 class="font-bold">Uploaded Files:</h3>
+                        <ul class="mt-2">
+
+                            <ng-container *ngFor="let doc of documents">
+                                <li class="flex items-center">
+                                    <mat-icon svgIcon="heroicons_outline:paper-clip" class="mr-1"></mat-icon>
+                                    <a (click)="openDocument(doc.document_link)" class="underline cursor-pointer">{{
+                                        doc.document_name }}</a>
+                                    <button *ngIf="!isAllfieldDisabled" mat-icon-button (click)="removeDocument(i)"><mat-icon class="icon-size-5"
+                                            svgIcon="feather:trash"></mat-icon></button>
+                                </li>
+                            </ng-container>
+
+                        </ul>
+                    </div>
+
+                    <div *ngIf="!isAllfieldDisabled" class="mt-2">
+                        <label for="uploadFile1" class="mr-2">
+                            <a class="bg-white border-2 border-[#00E0AC] rounded p-3 hover:bg-slate-50">
+                                <span class="inline-flex items-center">
+                                    <span class="font-bold">
+                                        Attach File
+                                        <input type="file" id="uploadFile1" (change)="onFileSelected($event)" multiple
+                                            class="hidden" />
+                                    </span>
+                                </span>
+                            </a>
+                        </label>
+                    </div>
+
+
+                    <div class="mt-8">
+                        <form [formGroup]="projectForm" class="flex flex-col items-start">
+                            <div class="text-xl sm:mb-4 font-bold tracking-tight leading-6 truncate">
+                                Project
+                            </div>
+
+                            <div class="mt-2" *ngIf="!isNewProject">
+                                <p class="underline" *ngIf="!isAllfieldDisabled" (click)="onNewProject()">Create a new project</p>
+                            </div>
+                            <div class="w-1/4 mt-2">
+                                <mat-form-field class="w-full col-lg-6">
+                                    <mat-label>Assign to a project</mat-label>
+                                    <mat-select [placeholder]="'Not assigned to project'"
+                                        [formControlName]="'project_id'">
+                                        <mat-option [value]="project?._id"
+                                            *ngFor="let project of projectList">{{project?.name }}</mat-option>
+                                    </mat-select>
+                                    <mat-error>project is required!</mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <div *ngIf="isNewProject" class="w-1/4">
+                                <mat-form-field class="w-full  col-lg-6">
+                                    <mat-label>Project Name</mat-label>
+                                    <input matInput [formControlName]="'name'">
+                                    <mat-error>Project name is required!</mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <div *ngIf="isNewProject" class="w-1/4 flex items-center gap-2">
+                                <mat-form-field class="w-full col-lg-6">
+                                    <mat-label>Project start date</mat-label>
+                                    <input [matDatepicker]="picker1" matInput [formControlName]="'start_date'">
+                                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker1></mat-datepicker>
+                                    <mat-error>Expiry is required!</mat-error>
+                                </mat-form-field>
+
+                                <button type="button" (click)="saveNewProject()"
+                                    class="ml-auto mr-4 border w-24 h-12 rounded-lg font-bold bg-[#00E0AC]"> Save
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="px-2 col-span-12 lg:col-span-4 xl:col-span-3 od__side_invoice mt-4">
+            <div class="sm:col-span-6 flex flex-col flex-auto p-6 bg-card shadow overflow-hidden">
+                <div *ngIf="isOrderValueMatch && isProcessInstantQuote" class="mt-0">
+                    <div class="flex justify-between">
+                        <p for="Price" class="text-xl font-bold mb-4">
+                            Summary
+                        </p>
+                        <label class="text-xl font-bold">{{
+                            totalCost  | currency
+                            }}</label>
+                    </div>
+                    <div class="flex justify-between mb-2">
+                        <span class="text-md font-bold text-slate-500">Parts ({{ totalQuantity }})</span>
+
+                        <span class="text-md font-bold text-slate-500">{{
+                            partsTotalCost + processAppliedCost | currency
+                            }}</span>
+                    </div>
+                    <div class="flex justify-between mb-2">
+                        <span class="text-md font-bold text-slate-500">Promotion</span>
+                        <span class="text-md font-bold text-slate-500">-{{
+                            promotionCost  + processAppliedCost | currency
+                            }}</span>
+                    </div>
+                    <div class="flex justify-between mb-2">
+                        <span class="text-md font-bold text-slate-500">Delivery fees</span>
+                        <span class="text-md font-bold text-slate-500">{{
+                            deliveryFee | currency
+                            }}</span>
+                    </div>
+                    <div class="flex justify-between mb-2">
+                        <span class="text-md font-bold text-slate-500">Subtotal</span>
+                        <span class="text-md font-bold text-slate-500">{{
+                            subTotalCost  | currency
+                            }}</span>
+                    </div>
+
+                    <div class="flex justify-between mb-2">
+                        <span class="text-md font-bold text-slate-500">GST (10%)</span>
+                        <span class="text-md font-bold text-slate-500">{{
+                            gstCost | currency
+                            }}</span>
+                    </div>
+                    <div class="flex justify-between mb-2">
+                        <span class="text-md font-bold text-slate-500">Total</span>
+                        <span class="text-md font-bold text-slate-500">{{
+                            totalCost | currency
+                            }}</span>
+                    </div>
+
+                    <div class="mt-4 w-full">
+                        <p class="text-md font-bold mb-2">Promotion code</p>
+                        <!-- <div class="flex justify-start gap-2 od__promotion-input"> -->
+                        <div class="flex justify-start gap-2">
+                            <mat-form-field class="w-full fuse-mat-dense">
+                                <input type="text" matInput [formControl]="promotionCodeFormControl" />
+                                <mat-error *ngIf="isPromotionCodeInvalid" class="flex items-center">
+                                    <mat-icon class="icon-size-5 text-red-400 mr-1"
+                                        [svgIcon]="'mat_solid:warning_amber'"></mat-icon>
+                                    Promotion code invalid!</mat-error>
+                            </mat-form-field>
+                            <button *ngIf="isPromotionApplied" class="fuse-alert-dismiss-button" mat-icon-button (click)="onDeletePromo()">
+                                <mat-icon class="text-red-400" [svgIcon]="'feather:trash'"></mat-icon>
+                            </button>
+                        </div>
+
+                        <button *ngIf="!isPromotionApplied" (click)="onValidatePromo()" class="btn w-full rounded p-2 mt-2 flex justify-center">
+                            <span class="font-semibold">Apply promotion</span>
+                            <!-- <mat-spinner class="w-5 h-5"></mat-spinner> -->
+                        </button>
+                    </div>
+
+                    <hr class="mb-2" />
+
+                    <div class="mt-6 flex w-full gap-3">
+                        <!-- Submit button with Angular Material and Tailwind CSS -->
+                        <div class="w-1/2">
+                          <button (click)="submit()" mat-flat-button color="primary" class="w-full text-[#222B4E] btn-theme rounded p-3 font-semibold">
+                            <span>Finalise quote</span>
+                          </button>
+                        </div>
+
+                        <!-- Save & Exit button with Angular Material and Tailwind CSS -->
+                        <div class="w-1/2">
+                          <button  (click)="onSaveAndExit()" class="w-full  border border-[#00E0AC] h-full text-[1em] font-bold leading-[1.3em] text-[#222B4E] rounded-md">
+                            Save & exit
+                          </button>
+                        </div>
+                      </div>
+                </div>
+
+               <div *ngIf="!isOrderValueMatch || !isProcessInstantQuote" class="mt-0">
+                    <div class="flex justify-between">
+                        <p for="Price" class="text-xl font-bold mb-4">
+                            Summary
+                    </div>
+
+                    <div class="mt-2">
+
+                        <p>An instant quote is unavailable at the moment as your cart contains models or processes that require a review.</p>
+                    </div>
+
+                    <div class="mt-2">
+                        <p>Please continue to request a quote and a Formero team member will be in contact to soon.</p>
+                    </div>
+
+                    <hr class="mb-2" />
+
+                    <div class="mt-6 flex w-full gap-3">
+                        <!-- Submit button with Angular Material and Tailwind CSS -->
+                        <div class="w-1/2">
+                          <button (click)="submit()" mat-flat-button color="primary" class="w-full text-[#222B4E] btn-theme rounded p-3 font-semibold">
+                            <span *ngIf="!isAllfieldDisabled">Request quote</span>
+                            <span *ngIf="isAllfieldDisabled">Quote inreview</span>
+                          </button>
+                        </div>
+
+                        <!-- Save & Exit button with Angular Material and Tailwind CSS -->
+                        <div class="w-1/2">
+                          <button  (click)="onSaveAndExit()" class="w-full  border border-[#00E0AC] h-full text-[1em] font-bold leading-[1.3em] text-[#222B4E] rounded-md">
+                            Save & exit
+                          </button>
+                        </div>
+                      </div>
+
+                      <div class="mt-6">
+                        <p class="text-slate-400">
+                           An instant quote is not possible as your cart contains models or processes that require a review.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

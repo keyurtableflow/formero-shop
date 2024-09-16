@@ -1,0 +1,25 @@
+<button mat-flat-button [matMenuTriggerFor]="userActions">
+    <mat-icon
+        class="icon-size-5"
+        [svgIcon]="'heroicons_outline:user-circle'"
+    ></mat-icon>
+    <span class="ml-2 hidden sm:block">My account
+        <mat-icon
+        class="icon-size-5 v-middile "
+        [svgIcon]="'mat_outline:keyboard_arrow_down'"
+    ></mat-icon>
+    </span>
+    <mat-menu [xPosition]="'before'" #userActions="matMenu">
+        <button mat-menu-item>
+            <mat-icon [svgIcon]="'heroicons_outline:user-circle'"></mat-icon>
+            <span>Profile</span>
+        </button>
+        <mat-divider class="my-2"></mat-divider>
+        <button mat-menu-item (click)="signOut()">
+            <mat-icon
+                [svgIcon]="'heroicons_outline:arrow-right-on-rectangle'"
+            ></mat-icon>
+            <span>Sign out</span>
+        </button>
+    </mat-menu>
+</button>

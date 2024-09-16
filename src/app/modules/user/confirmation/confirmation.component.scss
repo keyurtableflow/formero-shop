@@ -1,0 +1,31 @@
+.btn {
+    background-color: white !important;
+    border: 2px solid #00E0AC !important;
+}
+
+.btn-theme {
+    background-color: #00E0AC !important;
+}
+
+.quantity-form {
+    display: inline-block;
+    position: relative;
+
+    .qty-plus {
+        position: absolute;
+        right: 2px;
+        top: 20px;
+    }
+
+    .qty-minus {
+        position: absolute;
+        right: 2px;
+        bottom: 20px;
+    }
+
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    opacity: 0
+}

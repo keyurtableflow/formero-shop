@@ -1,0 +1,59 @@
+<!-- step-tabs.component.html -->
+<mat-tab-group
+    class="bg-white header_block_tab"
+    [(selectedIndex)]="selectedTabIndex"
+    (selectedIndexChange)="onTabChange($event)"
+>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <div class="tab-label-container">
+                <span
+                    [ngClass]="{
+                        'dot-accessed': stepService.isStepCompleted(0),
+                        'dot-not-accessed': !stepService.isStepCompleted(0)
+                    }"
+                ></span>
+                <span class="text-content">Upload models</span>
+            </div>
+        </ng-template>
+    </mat-tab>
+    <mat-tab [disabled]="!stepService.isStepCompleted(0)">
+        <ng-template mat-tab-label>
+            <div class="tab-label-container">
+                <span
+                    [ngClass]="{
+                        'dot-accessed': stepService.isStepCompleted(1),
+                        'dot-not-accessed': !stepService.isStepCompleted(1)
+                    }"
+                ></span>
+                <span class="text-content">Customise order</span>
+            </div>
+        </ng-template>
+    </mat-tab>
+    <mat-tab [disabled]="!stepService.isStepCompleted(1)">
+        <ng-template mat-tab-label>
+            <div class="tab-label-container">
+                <span
+                    [ngClass]="{
+                        'dot-accessed': stepService.isStepCompleted(2),
+                        'dot-not-accessed': !stepService.isStepCompleted(2)
+                    }"
+                ></span>
+                <span class="text-content">Additional details</span>
+            </div>
+        </ng-template>
+    </mat-tab>
+    <mat-tab [disabled]="!stepService.isStepCompleted(2)">
+        <ng-template mat-tab-label>
+            <div class="tab-label-container">
+                <span
+                    [ngClass]="{
+                        'dot-accessed': stepService.isStepCompleted(3),
+                        'dot-not-accessed': !stepService.isStepCompleted(3)
+                    }"
+                ></span>
+                <span class="text-content">Review & pay</span>
+            </div>
+        </ng-template>
+    </mat-tab>
+</mat-tab-group>

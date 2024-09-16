@@ -1,0 +1,645 @@
+<div class="bg-gray-50 p-6 sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden dark:bg-transparent">
+    <div class="p-2">
+        <a mat-stroked-button class="bg-[#00E0AC] hover:bg-[#2fcfaa]" [routerLink]="'/quotation'">
+            <span class="inline-flex items-center">
+                <mat-icon class="mr-1.5 icon-size-5 text-white" [svgIcon]="'heroicons_outline:chevron-left'">
+                </mat-icon>
+                <span class="text-white">
+                    BACK TO CART
+                </span>
+            </span>
+        </a>
+    </div>
+    <div class="grid grid-cols-12 gap-4 p-4 min-h-100">
+        <div class="py-4 px-2 col-span-12 lg:col-span-8 xl:col-span-9">
+            <div>
+                <div class="sm:col-span-6 flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
+                    <div class="text-xl font-bold tracking-tight leading-6 truncate">
+                        Cart Items
+                    </div>
+                    <div class="flex flex-col flex-auto mt-2 overflow-x-auto">
+                        <table class="min-w-240 overflow-y-visible" mat-table [dataSource]="rows">
+                            <!-- Type -->
+                            <ng-container matColumnDef="Model" sticky>
+                                <th mat-header-cell *matHeaderCellDef>Model</th>
+                                <td mat-cell *matCellDef="let budget">
+                                    <span class="flex items-center">
+                                        <span class="ml-3 leading-4">
+                                            <img src="{{ budget.Model }}" alt="" srcset="" class="max-w-14 max-h-14" />
+                                        </span>
+                                    </span>
+                                </td>
+                            </ng-container>
+
+                            <!-- Total -->
+                            <ng-container matColumnDef="Material">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    Material
+                                </th>
+                                <td mat-cell *matCellDef="let budget">
+                                    <span class="font-medium text-right">
+                                        {{ budget.Material }}
+                                    </span>
+                                </td>
+                            </ng-container>
+
+                            <!-- Expenses amount -->
+                            <ng-container matColumnDef="Specification">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    Specification
+                                </th>
+                                <td mat-cell *matCellDef="let budget">
+                                    <ul class="p-2">
+                                        <li class="text-md font-bold">
+                                            Layer thickness :
+                                            {{
+                                            budget.Specification
+                                            .Layerthickness
+                                            }}
+                                        </li>
+                                        <li class="text-md font-bold">
+                                            Filling :
+                                            {{ budget.Specification.Filling }}
+                                        </li>
+                                        <li class="text-md font-bold">
+                                            Color:
+                                            {{ budget.Specification.Color }}
+                                        </li>
+                                        <li class="text-md font-bold">
+                                            Lead time:
+                                            {{ budget.Specification.Leadtime }}
+                                        </li>
+                                    </ul>
+                                </td>
+                            </ng-container>
+
+                            <!-- Expenses percentage -->
+                            <ng-container matColumnDef="Quantity">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    Quantity
+                                </th>
+                                <td mat-cell *matCellDef="let budget">
+                                    <div class="relative flex items-center">
+                                        <button type="button" id="decrement-button"
+                                            data-input-counter-decrement="counter-input"
+                                            class="flex-shrink-0 bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 inline-flex items-center justify-center border border-gray-300 rounded-md h-5 w-5 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
+                                            <svg class="w-2.5 h-2.5 text-gray-900 dark:text-white" aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+                                                <path stroke="currentColor" stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-width="2" d="M1 1h16" />
+                                            </svg>
+                                        </button>
+                                        <input type="text" id="counter-input" data-input-counter
+                                            class="flex-shrink-0 text-gray-900 dark:text-white border-0 bg-transparent text-sm font-normal focus:outline-none focus:ring-0 max-w-[2.5rem] text-center"
+                                            placeholder="" [value]="budget.Quantity" required />
+                                        <button type="button" id="increment-button"
+                                            data-input-counter-increment="counter-input"
+                                            class="flex-shrink-0 bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 inline-flex items-center justify-center border border-gray-300 rounded-md h-5 w-5 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
+                                            <svg class="w-2.5 h-2.5 text-gray-900 dark:text-white" aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                                                <path stroke="currentColor" stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </ng-container>
+
+                            <!-- Remaining amount -->
+                            <ng-container matColumnDef="Batchdiscount">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    Batch discount
+                                </th>
+                                <td mat-cell *matCellDef="let budget">
+                                    {{ budget.Batchdiscount }}%
+                                </td>
+                            </ng-container>
+
+                            <!-- Remaining percentage -->
+                            <ng-container matColumnDef="Priceperpart">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    Price per part
+                                </th>
+                                <td mat-cell *matCellDef="let budget">
+                                    <span class="flex items-center">
+                                        <span class="ml-3 leading-4">{{
+                                            budget.Priceperpart
+                                            | currency : "USD"
+                                            }}</span>
+                                    </span>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Pricetotal">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    Price total
+                                </th>
+                                <td mat-cell *matCellDef="let budget">
+                                    <span class="flex items-center">
+                                        <span class="ml-3 leading-4">{{
+                                            budget.Pricetotal | currency : "USD"
+                                            }}</span>
+                                    </span>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="actions">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    Action
+                                </th>
+                                <td mat-cell *matCellDef="let budget">
+                                    <span class="flex items-center">
+                                        <span class="ml-3 leading-4">
+                                            <button mat-icon-button (click)="deleteTag(tag)" matSuffix>
+                                                <mat-icon class="icon-size-5 text-red-400" [svgIcon]="
+                                                        'heroicons_solid:trash'
+                                                    "></mat-icon>
+                                            </button>
+                                        </span>
+                                    </span>
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="columns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: columns"></tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <div class="sm:col-span-6 flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
+                        <div class="text-xl font-bold tracking-tight leading-6 truncate">
+                            Contact
+                        </div>
+
+                        <div class="flex flex-col flex-auto mt-2 overflow-x-auto">
+                            <form [formGroup]="contactForm" class="flex flex-col items-start w-full" #contactNgForm="ngForm">
+                              <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4 mb-4 w-full">
+                                <div class="col-span-1">
+                                  <mat-form-field class="w-full fuse-mat-dense">
+                                    <mat-label>First Name</mat-label>
+                                    <input matInput [formControlName]="'firstName'">
+                                    <mat-error *ngIf="contactForm.get('firstName').hasError('required')">First name is required!</mat-error>
+                                  </mat-form-field>
+                                </div>
+
+                                <div class="col-span-1">
+                                  <mat-form-field class="w-full fuse-mat-dense">
+                                    <mat-label>Last Name</mat-label>
+                                    <input matInput [formControlName]="'lastName'">
+                                    <mat-error *ngIf="contactForm.get('lastName').hasError('required')">Last name is required!</mat-error>
+                                  </mat-form-field>
+                                </div>
+
+                                <div class="col-span-1">
+                                  <mat-form-field class="w-full fuse-mat-dense">
+                                    <mat-label>Phone</mat-label>
+                                    <input matInput [formControlName]="'phone'">
+                                    <mat-error *ngIf="contactForm.get('phone').hasError('required')">Phone is required!</mat-error>
+                                    <mat-error *ngIf="contactForm.get('phone').hasError('pattern')">Enter a valid phone number</mat-error>
+                                  </mat-form-field>
+                                </div>
+
+                                <div class="col-span-1">
+                                  <mat-form-field class="w-full fuse-mat-dense">
+                                    <mat-label>Email</mat-label>
+                                    <input matInput [formControlName]="'email'">
+                                    <mat-error *ngIf="contactForm.get('email').hasError('required')">Email is required</mat-error>
+                                    <mat-error *ngIf="contactForm.get('email').hasError('email')">Please enter a valid email.</mat-error>
+                                  </mat-form-field>
+                                </div>
+
+
+                              </div>
+
+
+                        <div>
+                            <div class="text-xl font-bold tracking-tight leading-2 truncate">
+                                Additional contacts
+                            </div>
+                            <p class="tetxt-sm text-slate-400">List the email addresses you’d like to send notifications to</p>
+                            <mat-form-field class="w-full mt-2 fuse-mat-dense">
+                                <input matInput [formControlName]="'additionalContacts'" placeholder="Enter an email...">
+                              </mat-form-field>
+                        </div>
+                            </form>
+                        </div>
+
+
+                    </div>
+                </div>
+
+
+                <div class="mt-4">
+                    <div class="sm:col-span-6 flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
+                        <div class="text-xl font-bold tracking-tight leading-6 truncate">
+                            Delivery
+                        </div>
+
+                        <div class="flex items-center mt-2 p-0.5 w-60 rounded-full overflow-hidden bg-gray-100 dark:bg-gray-700">
+                            <button
+                                class="px-6 text-[#00E0AC]"
+                                [ngClass]="{'bg-card pointer-events-none shadow': localPickup,
+                                            'bg-transparent': !localPickup}"
+                                mat-flat-button
+                                (click)="localPickup = true"
+                                disableRipple>
+                                Local Pickup
+                            </button>
+                            <button
+                                class="px-6 text-[#00E0AC]"
+                                [ngClass]="{'bg-card pointer-events-none shadow': !localPickup,
+                                            'bg-transparent': localPickup}"
+                                mat-flat-button
+                                (click)="localPickup = false"
+                                disableRipple>
+                                Delivery
+                            </button>
+                        </div>
+
+                        <div class="mt-4">
+                            <p class="text-lg font-bold">Pickup address</p>
+                            <p>30-32 Ceylon St, Nunawading, VIC 3131, Australia</p>
+                        </div>
+
+                        <div>
+                            <div class="flex flex-col flex-auto mt-2 overflow-x-auto">
+                                <form [formGroup]="localPickupForm"  class="flex flex-col items-start w-full"  #contactNgForm="ngForm">
+                                  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 mb-4 w-full">
+
+                                    <div class="col-span-1">
+                                      <mat-form-field class="w-full fuse-mat-dense">
+                                        <mat-label>Company</mat-label>
+                                        <input matInput formControlName="company">
+                                        <mat-error *ngIf="localPickupForm.get('company').hasError('required')">Company is required!</mat-error>
+                                      </mat-form-field>
+                                    </div>
+
+                                    <div class="col-span-1">
+                                      <mat-form-field class="w-full fuse-mat-dense">
+                                        <mat-label>Address Line 1</mat-label>
+                                        <input matInput formControlName="addressLine1">
+                                        <mat-error *ngIf="localPickupForm.get('addressLine1').hasError('required')">Address Line 1 is required!</mat-error>
+                                      </mat-form-field>
+                                    </div>
+
+                                    <div class="col-span-1">
+                                      <mat-form-field class="w-full fuse-mat-dense">
+                                        <mat-label>Address Line 2</mat-label>
+                                        <input matInput formControlName="addressLine2">
+                                      </mat-form-field>
+                                    </div>
+
+                                    <div class="col-span-1">
+                                      <mat-form-field class="w-full fuse-mat-dense">
+                                        <mat-label>City</mat-label>
+                                        <input matInput formControlName="city">
+                                        <mat-error *ngIf="localPickupForm.get('city').hasError('required')">City is required!</mat-error>
+                                      </mat-form-field>
+                                    </div>
+
+                                    <div class="col-span-1">
+                                      <mat-form-field class="w-full fuse-mat-dense">
+                                        <mat-label>Postal Code</mat-label>
+                                        <input matInput formControlName="postalCode">
+                                        <mat-error *ngIf="localPickupForm.get('postalCode').hasError('required')">Postal Code is required!</mat-error>
+                                        <mat-error *ngIf="localPickupForm.get('postalCode').hasError('pattern')">Enter a valid postal code!</mat-error>
+                                      </mat-form-field>
+                                    </div>
+
+                                    <div class="col-span-1">
+                                      <mat-form-field class="w-full fuse-mat-dense">
+                                        <mat-label>Country</mat-label>
+                                        <input type="text" placeholder="Pick Country" aria-label="Number" matInput
+                                            [formControlName]="'country'" [matAutocomplete]="auto">
+                                        <mat-autocomplete #auto="matAutocomplete" autoActiveFirstOption
+                                            (optionSelected)="selectedCountry($event)">
+
+                                            <mat-option *ngFor="let country of filteredOptions | async"
+                                                [value]="country.name">{{country.name}}</mat-option>
+                                        </mat-autocomplete>
+                                        <mat-error *ngIf="localPickupForm.get('country').hasError('required')">Country is required!</mat-error>
+                                    </mat-form-field>
+                                    </div>
+
+                                  </div>
+                                </form>
+                              </div>
+
+                        </div>
+
+                        <div *ngIf="!localPickup">
+                            <div class="text-xl font-bold tracking-tight leading-6 truncate">
+                                Shipment
+                            </div>
+                        </div>
+
+                        <div *ngIf="!localPickup" class="flex flex-col flex-auto mt-2 overflow-x-auto bg-gray-100 py-4 px-2">
+                            <mat-radio-group class="grid grid-cols-1 md:grid-cols-2 gap-4" [color]="'primary'" [value]="'just-good'">
+
+                              <mat-radio-button class="mb-2 shipment-col" [value]="'everything'">
+                                <p class="text-base">Overnight Large Box Melbourne, Adelaide, Hobart CBD & Suburbs only</p>
+                                <p class="text-sm  text-slate-600">Large Box 53x33x53cm</p>
+                                <p class="text-lg font-bold">$45.00</p>
+                              </mat-radio-button>
+
+                              <mat-radio-button class="mb-2" [value]="'everything'">
+                                <p class="text-base">Overnight Large Box Melbourne, Adelaide, Hobart CBD & Suburbs only</p>
+                                <p class="text-sm  text-slate-600">Medium box 32x22x25cm up to 5Kg</p>
+                                <p class="text-lg font-bold">$40.00</p>
+                              </mat-radio-button>
+
+                              <mat-radio-button class="mb-2" [value]="'everything'">
+                                <p class="text-base">
+                                    Overnight Satchel Melbourne, Adelaide, Hobart CBD & Suburbs only</p>
+                                <p class="text-sm  text-slate-600">Satchel 16x16x11cm up to 3kg</p>
+                                <p class="text-lg font-bold">$35.00</p>
+                              </mat-radio-button>
+
+                              <mat-radio-button class="mb-2" [value]="'everything'">
+                                <p class="text-base">New Zealand - DHL - Small</p>
+                                <p class="text-sm  text-slate-600">Small satchel / small box 16x16x11cm / 1kg</p>
+                                <p class="text-lg font-bold">$60.00</p>
+                              </mat-radio-button>
+
+                              <mat-radio-button class="mb-2" [value]="'everything'">
+                                <p class="text-base">New Zealand - DHL - Medium</p>
+                                <p class="text-sm  text-slate-600">Medium box 32x22x25cm / 3kg</p>
+                                <p class="text-lg font-bold">$105.00</p>
+                              </mat-radio-button>
+
+                              <mat-radio-button class="mb-2" [value]="'everything'">
+                                <p class="text-base">New Zealand - DHL - Large</p>
+                                <p class="text-sm  text-slate-600">Large Box 53x33x53cm / 10kg</p>
+                                <p class="text-lg font-bold">$180.00</p>
+                              </mat-radio-button>
+
+
+
+                            </mat-radio-group>
+                          </div>
+
+
+                    </div>
+                </div>
+
+
+
+
+
+                <div class="mt-4">
+
+                    <div class="sm:col-span-6 flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
+
+                        <div>
+                            <div class="flex flex-col">
+                                <mat-checkbox
+                                    class="mb-3"
+                                    [checked]="false"
+                                    (change)="toggleCompanyOrder($event)"
+                                    [color]="'primary'">
+                                    This is company order
+                                </mat-checkbox>
+                            </div>
+                        </div>
+                        <div *ngIf="isCompanyOrderVisible" class="text-xl font-bold tracking-tight leading-6 truncate">
+                            Billing contact
+                        </div>
+                        <div *ngIf="isCompanyOrderVisible" class="text-md font-bold mt-2 tracking-tight leading-6 text-[#00E0AC] truncate">
+                            <a (click)="copyContactForm()"> Copy from contact <mat-icon class="mr-1.5 icon-size-4 text-[#00E0AC]" [svgIcon]="'heroicons_outline:clipboard-document-check'"></mat-icon></a>
+                        </div>
+
+                        <div *ngIf="isCompanyOrderVisible" class="flex flex-col flex-auto mt-2 overflow-x-auto">
+                            <form [formGroup]="billingContactForm" class="flex flex-col items-start w-full" #contactNgForm="ngForm">
+                              <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 mb-4 w-full">
+                                <div class="col-span-1">
+                                  <mat-form-field class="w-full fuse-mat-dense">
+                                    <mat-label>First Name</mat-label>
+                                    <input matInput [formControlName]="'firstName'">
+                                    <mat-error *ngIf="billingContactForm.get('firstName').hasError('required')">First name is required!</mat-error>
+                                  </mat-form-field>
+                                </div>
+
+                                <div class="col-span-1">
+                                  <mat-form-field class="w-full fuse-mat-dense">
+                                    <mat-label>Last Name</mat-label>
+                                    <input matInput [formControlName]="'lastName'">
+                                    <mat-error *ngIf="billingContactForm.get('lastName').hasError('required')">Last name is required!</mat-error>
+                                  </mat-form-field>
+                                </div>
+
+                                <div class="col-span-1">
+                                  <mat-form-field class="w-full fuse-mat-dense">
+                                    <mat-label>Phone</mat-label>
+                                    <input matInput [formControlName]="'phone'">
+                                    <mat-error *ngIf="billingContactForm.get('phone').hasError('required')">Phone is required!</mat-error>
+                                    <mat-error *ngIf="billingContactForm.get('phone').hasError('pattern')">Enter a valid phone number</mat-error>
+                                  </mat-form-field>
+                                </div>
+
+                                <div class="col-span-1">
+                                  <mat-form-field class="w-full fuse-mat-dense">
+                                    <mat-label>Email</mat-label>
+                                    <input matInput [formControlName]="'email'">
+                                    <mat-error *ngIf="billingContactForm.get('email').hasError('required')">Email is required</mat-error>
+                                    <mat-error *ngIf="billingContactForm.get('email').hasError('email')">Please enter a valid email.</mat-error>
+                                  </mat-form-field>
+                                </div>
+
+
+                              </div>
+
+
+
+                            </form>
+                        </div>
+
+
+                        <div *ngIf="isCompanyOrderVisible" class="text-xl font-bold tracking-tight leading-6 truncate">
+                            Billing address
+                        </div>
+                        <div *ngIf="isCompanyOrderVisible"  class="text-md font-bold mt-2 tracking-tight leading-6 text-[#00E0AC] truncate">
+                            <a (click)="copyDeliveryForm()"> Copy from delivery address <mat-icon class="mr-1.5 icon-size-4 text-[#00E0AC]" [svgIcon]="'heroicons_outline:clipboard-document-check'"></mat-icon></a>
+                        </div>
+
+                        <div *ngIf="isCompanyOrderVisible">
+                            <div class="flex flex-col flex-auto mt-2 overflow-x-auto">
+                                <form [formGroup]="billingAddressForm"  class="flex flex-col items-start w-full"  #contactNgForm="ngForm">
+                                  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 mb-4 w-full">
+
+                                    <div class="col-span-1">
+                                      <mat-form-field class="w-full fuse-mat-dense">
+                                        <mat-label>Company</mat-label>
+                                        <input matInput formControlName="company">
+                                        <mat-error *ngIf="billingAddressForm.get('company').hasError('required')">Company is required!</mat-error>
+                                      </mat-form-field>
+                                    </div>
+
+                                    <div class="col-span-1">
+                                      <mat-form-field class="w-full fuse-mat-dense">
+                                        <mat-label>Address Line 1</mat-label>
+                                        <input matInput formControlName="addressLine1">
+                                        <mat-error *ngIf="billingAddressForm.get('addressLine1').hasError('required')">Address Line 1 is required!</mat-error>
+                                      </mat-form-field>
+                                    </div>
+
+                                    <div class="col-span-1">
+                                      <mat-form-field class="w-full fuse-mat-dense">
+                                        <mat-label>Address Line 2</mat-label>
+                                        <input matInput formControlName="addressLine2">
+                                      </mat-form-field>
+                                    </div>
+
+                                    <div class="col-span-1">
+                                      <mat-form-field class="w-full fuse-mat-dense">
+                                        <mat-label>City</mat-label>
+                                        <input matInput formControlName="city">
+                                        <mat-error *ngIf="billingAddressForm.get('city').hasError('required')">City is required!</mat-error>
+                                      </mat-form-field>
+                                    </div>
+
+                                    <div class="col-span-1">
+                                      <mat-form-field class="w-full fuse-mat-dense">
+                                        <mat-label>Postal Code</mat-label>
+                                        <input matInput formControlName="postalCode">
+                                        <mat-error *ngIf="billingAddressForm.get('postalCode').hasError('required')">Postal Code is required!</mat-error>
+                                        <mat-error *ngIf="billingAddressForm.get('postalCode').hasError('pattern')">Enter a valid postal code!</mat-error>
+                                      </mat-form-field>
+                                    </div>
+
+                                    <div class="col-span-1">
+                                      <mat-form-field class="w-full fuse-mat-dense">
+                                        <mat-label>Country</mat-label>
+                                        <input type="text" placeholder="Pick Country" aria-label="Number" matInput
+                                            [formControlName]="'country'" [matAutocomplete]="auto">
+                                        <mat-autocomplete #auto="matAutocomplete" autoActiveFirstOption
+                                            (optionSelected)="selectedCountry($event)">
+
+                                            <mat-option *ngFor="let country of filteredOptions | async"
+                                                [value]="country.name">{{country.name}}</mat-option>
+                                        </mat-autocomplete>
+                                        <mat-error *ngIf="billingAddressForm.get('country').hasError('required')">Country is required!</mat-error>
+                                    </mat-form-field>
+                                    </div>
+
+                                  </div>
+                                </form>
+                              </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="mt-4">
+                    <div class="sm:col-span-6 flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
+                        <div class="text-xl font-bold tracking-tight leading-6 truncate">
+                            Notes
+                        </div>
+
+                        <div class="flex flex-col flex-auto mt-2 overflow-x-auto">
+                            <mat-form-field class="w-full">
+                                <textarea matInput placeholder="Put your notes here if necessary (link allowed)"></textarea>
+                              </mat-form-field>
+                        </div>
+
+                        <div>
+                            <label for="uploadFile1" class="mr-2">
+                                <a mat-stroked-button class="bg-white hover:bg-slate-50">
+                                    <span class="inline-flex items-center">
+                                        <span class="text-[#00E0AC]">
+                                        Attach File
+                                        <input type="file" id="uploadFile1" class="hidden" />
+                                        </span>
+                                    </span>
+                                </a>
+                            </label>
+                        </div>
+
+
+                    </div>
+                </div>
+
+
+
+
+
+            </div>
+        </div>
+
+
+        <div class="py-4 px-2 col-span-12 lg:col-span-4 xl:col-span-3">
+
+            <div class="sm:col-span-6 flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
+                <div class="mt-0">
+                    <p for="Price" class="text-xl font-bold mb-4">Total</p>
+                    <div class="flex justify-between mb-2">
+                        <span class="text-md font-bold text-slate-500">Models price</span>
+                        <span class="text-md font-bold text-slate-500">$120.42</span>
+                    </div>
+                    <div class="flex justify-between mb-2">
+                        <span class="text-md font-bold text-slate-500">Shipping price</span>
+                        <span class="text-md font-bold text-slate-500">$0.00</span>
+                    </div>
+                    <div class="flex justify-between mb-2">
+                        <span class="text-md font-bold text-slate-500">Subtotal</span>
+                        <span class="text-md font-bold text-slate-500">$120.42</span>
+                    </div>
+                    <div class="flex justify-between mb-2">
+                        <span class="text-md font-bold text-slate-500">GST (10%)</span>
+                        <span class="text-md font-bold text-slate-500">$12.04</span>
+                    </div>
+
+                    <hr>
+                    <div class="flex justify-between mb-2">
+                        <span class="text-md font-bold text-slate-500">Total</span>
+                        <span class="text-md font-bold text-slate-500">$132.46</span>
+                    </div>
+
+                    <div class=" mt-4">
+                        <p class="text-md font-bold mb-2">Promo code</p>
+                        <div class="flex justify-start gap-2">
+                            <mat-form-field class="w-64 fuse-mat-dense">
+                                <input type="text" matInput>
+                              </mat-form-field>
+
+                              <a mat-stroked-button class="bg-white hover:bg-slate-50">
+                                <span class="inline-flex items-center">
+                                    <span class="text-[#00E0AC]">
+                                    Apply
+                                    </span>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+
+
+                    <div class="mt-4">
+                        <a mat-stroked-button class="bg-[#00E0AC] hover:bg-[#2fcfaa] w-full my-3 px-8">
+                            <span class="inline-flex items-center">
+                                <span class="text-white">
+                                SUBMIT FOR REVIEW
+                                </span>
+                            </span>
+                        </a>
+                        <a mat-stroked-button class="bg-white hover:bg-slate-50 w-full px-8">
+                            <span class="inline-flex items-center">
+                                <span class="text-[#00E0AC]">
+                                VIEW AS PDF
+                                </span>
+                            </span>
+                        </a>
+
+                    </div>
+
+                    <div class="text-md font-bold flex justify-center mt-4">
+                        Have any questions? <span class="text-[#00E0AC]">
+                            Ask For a help
+                        </span>
+                    </div>
+                </div>
+                 </div>
+
+        </div>
+
+    </div>

@@ -1,0 +1,619 @@
+
+<div class=" bg-gray-50 sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden  dark:bg-transparent">
+
+    <div class="grid grid-cols-12 gap-4 p-4 min-h-100">
+
+        <div class="py-4 px-2 col-span-12 md:col-span-12 lg:col-span-3">
+
+            <div class="bg-white py-4 px-2 h-full">
+                <div class="models-box">
+                    <mat-accordion class="max-w-4xl mt-12">
+                        <mat-expansion-panel [expanded]="true">
+                            <mat-expansion-panel-header class="bg-slate-50"  [collapsedHeight]="'64px'">
+                                <mat-panel-title>
+                                    <mat-icon
+                                    class="ml-1.5 icon-size-5 mr-1.5"
+                                    [svgIcon]="'heroicons_outline:squares-2x2'">
+                                </mat-icon>
+
+                                    Models
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+
+                            <div class="mt-3">
+
+                                <ng-container *ngFor="let file of filesList;index as i">
+                                    <div class="bg-gray-50 hover:bg-gray-100 p-2" (click)="onFileSelected(file)">
+                                        <span>{{file?.name}}</span>
+                                    </div>
+                                </ng-container>
+
+
+
+                            </div>
+
+                            <div class="mt-3">
+                                <label for="uploadFile1" class="mr-2">
+                                    <a mat-stroked-button class="bg-[#00E0AC] models-btn" >
+                                        <span class="inline-flex items-center">
+                                                <span class="text-white">
+                                                    Upload Files
+                                                    <input type="file" id='uploadFile1'  (change)="onFileChange($event)" class="hidden" />
+                                                </span>
+                                            <mat-icon
+                                                class="ml-1.5 icon-size-5"
+                                                [svgIcon]="'heroicons_outline:document-check'">
+                                            </mat-icon>
+                                        </span>
+                                    </a>
+                                </label>
+
+                                <a mat-stroked-button class="mt-1 models-btn">
+                                    <span class="inline-flex items-center">
+                                            <span>
+                                                Recent Uploads
+                                            </span>
+                                        <mat-icon
+                                            class="ml-1.5 icon-size-5"
+                                            [svgIcon]="'heroicons_outline:folder-open'">
+                                        </mat-icon>
+                                    </span>
+                                </a>
+                            </div>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+                </div>
+
+                <div class="mt-4 cart-dtl">
+                    <mat-accordion class="max-w-4xl mt-12">
+                        <mat-expansion-panel [expanded]="true">
+                            <mat-expansion-panel-header class="bg-slate-50"  [collapsedHeight]="'64px'">
+                                <mat-panel-title>
+                                    <mat-icon
+                                    class="ml-1.5 icon-size-5 mr-1.5"
+                                    [svgIcon]="'heroicons_outline:shopping-cart'">
+                                </mat-icon>
+                                Cart</mat-panel-title>
+                            </mat-expansion-panel-header>
+                            there's nothing in the cart yet
+
+                            <div class="p-2">
+                                <div class="bg-slate-50 p-2 ">
+
+                                    <div class="flex items-center">
+                                        <div class="w-12 h-12 mx-2">
+                                            <img src="https://digifabster-media.s3.amazonaws.com/thumbs/cad47209-4c9f-4061-a8c4-8f5c85414ea03kh768a6.120x120.png?AWSAccessKeyId=AKIA4XIY7ZAF6N6MMAVG&Signature=3ykqK10wIin%2BWEGanLrUjyo2cVM%3D&Expires=1719468314" alt="">
+                                        </div>
+
+                                        <p class="text-md font-bold">Lock_ring_v3.stl</p>
+                                    </div>
+
+                                    <ul class="p-2">
+                                        <li>
+                                            <span class="text-sm font-bold text-slate-600">Material : </span> <span class="text-sm">MJF PA 12</span>
+                                        </li>
+                                        <li>
+                                            <span class="text-sm font-bold text-slate-600">Layer thickness : </span> <span class="text-sm">125.0 µm</span>
+                                        </li>
+                                        <li>
+                                            <span class="text-sm font-bold text-slate-600">Filling : </span> <span class="text-sm">standard</span>
+                                        </li>
+                                        <li>
+                                            <span class="text-sm font-bold text-slate-600">Lead time : </span> <span class="text-sm">7-8 working days for dispatch</span>
+                                        </li>
+                                        <li>
+                                            <span class="text-sm font-bold text-slate-600">Quantity : </span> <span class="text-sm">12</span>
+                                        </li>
+                                        <li>
+                                            <span class="text-sm font-bold text-slate-600">Lead time : </span>
+                                            <span class="text-sm">$17.62</span>
+                                        </li>
+                                        <li>
+                                            <span class="text-sm font-bold text-slate-600">Price total : </span>
+                                             <span class="text-sm">$17.62</span>
+                                        </li>
+                                    </ul>
+
+                                </div>
+                            </div>
+                            <div class="p-2">
+                                <div class="bg-slate-50 p-2 ">
+
+                                    <div class="flex items-center">
+                                        <div class="w-12 h-12 mx-2">
+                                            <img src="https://digifabster-media.s3.amazonaws.com/thumbs/cad47209-4c9f-4061-a8c4-8f5c85414ea03kh768a6.120x120.png?AWSAccessKeyId=AKIA4XIY7ZAF6N6MMAVG&Signature=3ykqK10wIin%2BWEGanLrUjyo2cVM%3D&Expires=1719468314" alt="">
+                                        </div>
+
+                                        <p class="text-md font-bold">Lock_ring_v3.stl</p>
+                                    </div>
+
+                                    <ul class="p-2">
+                                        <li>
+                                            <span class="text-sm font-bold text-slate-600">Material : </span> <span class="text-sm">MJF PA 12</span>
+                                        </li>
+                                        <li>
+                                            <span class="text-sm font-bold text-slate-600">Layer thickness : </span> <span class="text-sm">125.0 µm</span>
+                                        </li>
+                                        <li>
+                                            <span class="text-sm font-bold text-slate-600">Filling : </span> <span class="text-sm">standard</span>
+                                        </li>
+                                        <li>
+                                            <span class="text-sm font-bold text-slate-600">Lead time : </span> <span class="text-sm">7-8 working days for dispatch</span>
+                                        </li>
+                                        <li>
+                                            <span class="text-sm font-bold text-slate-600">Quantity : </span> <span class="text-sm">12</span>
+                                        </li>
+                                        <li>
+                                            <span class="text-sm font-bold text-slate-600">Lead time : </span>
+                                            <span class="text-sm">$17.62</span>
+                                        </li>
+                                        <li>
+                                            <span class="text-sm font-bold text-slate-600">Price total : </span>
+                                             <span class="text-sm">$17.62</span>
+                                        </li>
+                                    </ul>
+
+                                </div>
+                            </div>
+                            <div class="p-2">
+                                <div class="bg-slate-50 p-2 ">
+
+                                    <div class="flex items-center">
+                                        <div class="w-12 h-12 mx-2">
+                                            <img src="https://digifabster-media.s3.amazonaws.com/thumbs/cad47209-4c9f-4061-a8c4-8f5c85414ea03kh768a6.120x120.png?AWSAccessKeyId=AKIA4XIY7ZAF6N6MMAVG&Signature=3ykqK10wIin%2BWEGanLrUjyo2cVM%3D&Expires=1719468314" alt="">
+                                        </div>
+
+                                        <p class="text-md font-bold">Lock_ring_v3.stl</p>
+                                    </div>
+
+                                    <ul class="p-2">
+                                        <li>
+                                            <span class="text-sm font-bold text-slate-600">Material : </span> <span class="text-sm">MJF PA 12</span>
+                                        </li>
+                                        <li>
+                                            <span class="text-sm font-bold text-slate-600">Layer thickness : </span> <span class="text-sm">125.0 µm</span>
+                                        </li>
+                                        <li>
+                                            <span class="text-sm font-bold text-slate-600">Filling : </span> <span class="text-sm">standard</span>
+                                        </li>
+                                        <li>
+                                            <span class="text-sm font-bold text-slate-600">Lead time : </span> <span class="text-sm">7-8 working days for dispatch</span>
+                                        </li>
+                                        <li>
+                                            <span class="text-sm font-bold text-slate-600">Quantity : </span> <span class="text-sm">12</span>
+                                        </li>
+                                        <li>
+                                            <span class="text-sm font-bold text-slate-600">Lead time : </span>
+                                            <span class="text-sm">$17.62</span>
+                                        </li>
+                                        <li>
+                                            <span class="text-sm font-bold text-slate-600">Price total : </span>
+                                             <span class="text-sm">$17.62</span>
+                                        </li>
+                                    </ul>
+
+                                </div>
+                            </div>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="py-4 px-2 col-span-12 md:col-span-12 lg:col-span-6">
+
+            <div class="bg-white grid grid-cols-12 gap-2">
+
+                <div class="bg-white py-4 px-2 col-span-12 md:col-span-4">
+
+                    <div class="grid grid-cols-12 gap-2">
+                        <div class="col-span-12 md:col-span-12">
+                            <div class="bg-slate-50  h-80 overflow-auto">
+                                <app-modelviewer *ngIf="filesList?.length>0" [isInDialog]="isInDialog" [files]="files" [degree]="degree"></app-modelviewer>
+                            </div>
+                        </div>
+                        <div class="col-span-12 md:col-span-12">
+                            <div class="bg-slate-50 mt-2 py-2">
+                                <p class="font-bold ml-2 text-sm">Size: 30.00 x 28.57 x 1.35
+                                     <span>
+
+                                        <button
+                                            mat-icon-button
+                                            [matMenuTriggerFor]="summaryMenu">
+                                            <span class="text-[#00E0AC] text-sm">mm</span>
+                                        </button>
+                                        <mat-menu #summaryMenu="matMenu">
+                                            <button mat-menu-item>Millimeters</button>
+                                            <button mat-menu-item>Centimeters</button>
+                                            <button mat-menu-item>Inches</button>
+                                        </mat-menu>
+                                     </span>
+                                    </p>
+
+                                    <p class="font-bold ml-2 text-sm">
+                                        Volume : 0.47 cm<sup>3</sup>
+                                    </p>
+
+                                    <p class="font-bold ml-2 mt-4 text-md text-[#00E0AC]">
+                                        <mat-icon
+                                        class="ml-1.5 icon-size-3 mr-1.5 text-[#00E0AC]"
+                                        [svgIcon]="'heroicons_outline:pencil'">
+                                        </mat-icon>
+                                        <span >Resize model</span>
+                                    </p>
+                            </div>
+                        </div>
+                        <div class="col-span-12 md:col-span-12">
+                            <div *ngIf="true;else other_content" class="border rounded border-red-400 flex mt-2 p-2">
+                                <div class="text-red-500 mt-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 20 20" role="img" aria-hidden="true" class="rmd-icon rmd-typography--theme-error"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 18.333a8.333 8.333 0 1 0 0-16.666 8.333 8.333 0 0 0 0 16.666ZM4.108 4.108l11.784 11.784"></path></svg>
+                                </div>
+                                <div>
+                                    <div class="font-semibold  ml-2">
+                                        <span>
+                                            Walls are too thin, minimum recommended thickness value is 0.7
+                                        </span>
+                                            <!-- <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16" role="img" aria-hidden="true" class="rmd-icon model-notifications_messageHelpIcon__8q44V rmd-typography--theme-primary text-[#00E0AC]" id="model_viewer-wall_thickness-hint"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 14.667A6.667 6.667 0 1 0 8 1.333a6.667 6.667 0 0 0 0 13.334Z"></path><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6.057 6a2 2 0 0 1 3.887.667c0 1.333-2 2-2 2M8 11.333h.005"></path></svg> -->
+                                    </div>
+
+                                    <div class="mt-2">
+                                        <mat-slide-toggle ngModel name="enableWifi" [disabled]="true">Show thin walls</mat-slide-toggle>
+                                    </div>
+
+                                    <div class="mt-4 text-sm font-bold ">
+                                        <mat-panel-title>
+                                            <mat-icon
+                                            class="icon-size-5 mr-1.5 text-[#00E0AC]"
+                                            [svgIcon]="'heroicons_outline:question-mark-circle'">
+                                        </mat-icon>
+                                        <span class="text-[#00E0AC]">
+                                            Ask For a help
+                                        </span>
+                                        </mat-panel-title>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <ng-template #other_content>
+                        <div class="border rounded border-green-400 flex mt-6 p-2">
+                            <div class="text-green-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 20 20" role="img" aria-hidden="true" class="rmd-icon rmd-typography--theme-success"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 18.333A8.333 8.333 0 1 0 1.667 10 8.333 8.333 0 0 0 10 18.333Z"></path><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m7.5 10 1.667 1.667L12.5 8.333"></path></svg>
+                            </div>
+                            <div>
+                                <div class="font-semibold  ml-2">
+                                    <span>
+                                        Wall thickness test passed
+                                    </span>
+
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+
+                </div>
+
+                <div class="bg-white py-4 px-2 col-span-12 md:col-span-8">
+                    <div class="flex flex-wrap justify-center gap-4 ">
+
+                        <ng-container *ngFor="let process of processList;index as i">
+                            <fuse-card class="flex items-center max-w-36 px-3 py-5 filter-info sm:max-w-40" (click)="onProcessSelected(process,i)">
+                                <div class="items-center text-center">
+                                    <div class="flex justify-end">
+                                        <!-- <img
+                                        class="w-14 h-14 rounded-full items-center "
+                                        src="https://digifabster.com/media/tech_thumbs/default/FDM1.jpg"
+                                        alt="Card cover image"> -->
+                                        <ng-container *ngIf="selectedProcessIndex == i">
+                                            <mat-icon
+                                                class="icon-size-5 text-green-600"
+                                                [svgIcon]="'heroicons_solid:check-badge'"
+                                                [matTooltip]="'Selected Process'"></mat-icon>
+                                        </ng-container>
+                                    </div>
+
+                                    <div class="text-md font-semibold leading-tight">{{process?.short_name}}</div>
+                                    <div class="text-sm text-secondary mt-2">{{process?.process_name}}</div>
+                                </div>
+                            </fuse-card>
+
+                        </ng-container>
+
+
+
+                        <!-- <fuse-card class="flex items-center max-w-36 px-3 py-5 filter-info sm:max-w-40">
+                            <div class="items-center text-center">
+                                <div class="flex justify-center">
+                                    <img
+                                    class="w-14 h-14 rounded-full items-center "
+                                    src="https://digifabster.com/media/tech_thumbs/default/FDM1.jpg"
+                                    alt="Card cover image">
+                                    <ng-container >
+                                        <mat-icon
+                                            class="icon-size-5 text-green-600"
+                                            [svgIcon]="'heroicons_solid:check-badge'"
+                                            [matTooltip]="'You completed this course at least once'"></mat-icon>
+                                    </ng-container>
+                                </div>
+
+                                <div class="text-md font-semibold leading-tight">Brian Hughes</div>
+                                <div class="text-sm text-secondary mt-2">Cost effective technology used to build strong, durable, and accurate parts.</div>
+                            </div>
+                        </fuse-card> -->
+
+                    </div>
+
+
+                    <div class="flex-wrap gap-2 mt-4">
+                        <mat-form-field class="w-full col-lg-6">
+                            <mat-label class="text-md">Material</mat-label>
+                            <mat-select  [placeholder]="'Select Material'" [(ngModel)]="selectedMaterial" (change)="onMaterialSelectd()">
+                                <mat-option *ngFor="let material of materialList" [value]="material._id">
+                                    {{ material?.material_name }}
+                                  </mat-option>
+                            </mat-select>
+                            <mat-error>Material is required!</mat-error>
+                        </mat-form-field>
+
+                        <p class="text-sm font-semibold text-slate-500">Onyx™ is a micro carbon fiber filled nylon that yields accurate parts with near flawless surface finish. Parts exhibit high strength, toughness, and chemical resistance when printed alone, and can be reinforced with continuous fibers to yield aluminum-strength parts.</p>
+
+                    </div>
+
+                    <div class="flex mt-4">
+                        <div class="row flex w-full gap-[2em]">
+                            <mat-form-field class="w-full col-6">
+                                <mat-label>Layer thickness (Standard)</mat-label>
+                                <input matInput [value]="'125.0 mu'" [disabled]="true">
+                            </mat-form-field>
+
+                            <mat-form-field class="w-full col-6">
+                                <mat-label>Filling (standard triangle fill)</mat-label>
+                                <input matInput [value]="'standard'" [disabled]="true">
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 flex items-center">
+                        <p class="text-md font-semibold mr-3">Color: </p>
+                        <div class="block md:block truncate border rounded border-slate-400 w-30">
+                            <div class="flex items-center bg-slate-50 p-2">
+                                <div class='box mx-2' [ngStyle]="{'background-color': '#000000'}"></div>
+                                Black
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="py-4 px-2 col-span-12 md:col-span-12 lg:col-span-3">
+            <div class="bg-white p-3 h-full relative quantity-main">
+
+                <div class="quantity-scroll-div">
+
+                    <div class="flex justify-between">
+                        <span class="text-md font-bold">
+                        Quantity & Priority
+                        </span>
+                        <span class="text-md font-bold">
+                            <a class="text-[#00E0AC]" (click)="showBulkPrice()">  <mat-icon   class=" icon-size-3 text-[#00E0AC]" svgIcon="heroicons_outline:arrow-long-up"></mat-icon> Show bulk prices</a>
+                        </span>
+                    </div>
+
+                    <div *ngIf="bulkPrice" class="mt-3">
+                        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-2">
+                                            Quantity
+                                        </th>
+                                        <th scope="col" class="px-6 py-2">
+                                            Price
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            1
+                                        </th>
+                                        <td class="px-6 py-2">
+                                            $10.52
+                                        </td>
+                                    </tr>
+                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            2
+                                        </th>
+
+                                        <td class="px-6 py-2">
+                                            $9.44
+                                        </td>
+                                    </tr>
+                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            3
+                                        </th>
+                                        <td class="px-6 py-2">
+                                            $9.09
+                                        </td>
+                                    </tr>
+                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            4
+                                        </th>
+                                        <td class="px-6 py-2">
+                                            $8.91
+                                        </td>
+                                    </tr>
+                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            5
+                                        </th>
+                                        <td class="px-6 py-2">
+                                            $8.80
+                                        </td>
+                                    </tr>
+                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            10
+                                        </th>
+                                        <td class="px-6 py-2">
+                                            $8.58
+                                        </td>
+                                    </tr>
+                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            50
+                                        </th>
+                                        <td class="px-6 py-2">
+                                            $8.41
+                                        </td>
+                                    </tr>
+                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            100
+                                        </th>
+                                        <td class="px-6 py-2">
+                                            $8.39
+                                        </td>
+                                    </tr>
+                                    <tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            500
+                                        </th>
+                                        <td class="px-6 py-2">
+                                            $8.37
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <label for="counter-input" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Choose quantity:</label>
+                        <div class="relative flex items-center">
+                            <button type="button" id="decrement-button" data-input-counter-decrement="counter-input" class="flex-shrink-0 bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 inline-flex items-center justify-center border border-gray-300 rounded-md h-5 w-5 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
+                                <svg class="w-2.5 h-2.5 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16"/>
+                                </svg>
+                            </button>
+                            <input type="text" id="counter-input" data-input-counter class="flex-shrink-0 text-gray-900 dark:text-white border-0 bg-transparent text-sm font-normal focus:outline-none focus:ring-0 max-w-[2.5rem] text-center" placeholder="" value="12" required />
+                            <button type="button" id="increment-button" data-input-counter-increment="counter-input" class="flex-shrink-0 bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 inline-flex items-center justify-center border border-gray-300 rounded-md h-5 w-5 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
+                                <svg class="w-2.5 h-2.5 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <mat-form-field class="w-full col-6">
+                            <mat-label>Priority</mat-label>
+                            <input matInput [value]="'7-8 working days for dispatch'" [disabled]="true">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="mt-0">
+                        <p for="Price" class="text-md font-bold mb-4">Price</p>
+
+                        <div class="flex justify-between mb-2">
+                            <span class="text-md font-bold text-slate-500">Per part</span>
+                            <span class="text-md font-bold text-slate-500">$7.79</span>
+                        </div>
+
+                        <div class="flex justify-between mb-2">
+                            <span class="text-md font-bold text-slate-500">Post production per part</span>
+                            <span class="text-md font-bold text-slate-500">$0.00</span>
+                        </div>
+
+                        <div class="flex justify-between mb-2">
+                            <span class="text-md font-bold text-slate-500">Production priority</span>
+                            <span class="text-md font-bold text-slate-500">$0.00</span>
+                        </div>
+
+                        <div class="flex justify-between mb-2">
+                            <span class="text-md font-bold text-slate-500">Quantity</span>
+                            <span class="text-md font-bold text-slate-500">12</span>
+                        </div>
+
+                        <div class="flex justify-between mb-2">
+                            <span class="text-md font-bold text-slate-500">Startup cost</span>
+                            <span class="text-md font-bold text-slate-500">$0.00</span>
+                        </div>
+
+                        <div class="flex justify-between mb-2">
+                            <span class="text-md font-bold text-slate-500">Subtotal</span>
+                            <span class="text-md font-bold text-slate-500">$15.58</span>
+                        </div>
+                        <hr>
+
+                        <div class="flex justify-between mb-2">
+                            <span class="text-md font-bold text-slate-500">GST (10%)</span>
+                            <span class="text-md font-bold text-slate-500">$1.56</span>
+                        </div>
+
+                        <div class="flex justify-between ">
+                            <span class="text-md font-bold text-slate-500">Total</span>
+                            <span class="text-md font-bold text-slate-500">$17.14</span>
+                        </div>
+
+                        <div class="mt-4 flex justify-center">
+                            <a mat-stroked-button class="bg-[#00E0AC] w-44" [routerLink]="'/quotation/order'">
+                                <span class="inline-flex items-center">
+                                    <span class="text-white">
+                                        Add to cart
+                                        <input type="file" id='uploadFile1' class="hidden" />
+                                    </span>
+                                </span>
+                            </a>
+                        </div>
+
+                        <div class="text-md font-bold flex justify-center mt-4">
+                            Have any questions? <span class="text-[#00E0AC]">
+                                Ask For a help
+                            </span>
+                        </div>
+
+                    </div>
+
+                    <div class="mt-4 total-box">
+                        <mat-accordion class="max-w-4xl mt-12">
+                            <mat-expansion-panel>
+                                <mat-expansion-panel-header class="bg-slate-200" [collapsedHeight]="'50px'">
+                                    <mat-panel-title> Total: - </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <div class="flex justify-between mb-2">
+                                    <span class="text-md font-bold text-slate-500">Models price</span>
+                                    <span class="text-md font-bold text-slate-500">$0.00</span>
+                                </div>
+                                <div class="flex justify-between mb-2">
+                                    <span class="text-md font-bold text-slate-500">Delivery</span>
+                                    <span class="text-md font-bold text-slate-500">$0.00</span>
+                                </div>
+                                <div class="flex justify-between ">
+                                    <span class="text-md font-bold text-slate-500">Subtotal</span>
+                                    <span class="text-md font-bold text-slate-500">$0.00</span>
+                                </div>
+                                <hr>
+                                <div class="flex justify-between ">
+                                    <span class="text-md font-bold text-slate-500">Total</span>
+                                    <span class="text-md font-bold text-slate-500">$0.00</span>
+                                </div>
+                            </mat-expansion-panel>
+                        </mat-accordion>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>

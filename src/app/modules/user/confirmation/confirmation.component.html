@@ -1,0 +1,455 @@
+<div class="absolute inset-0 flex flex-col min-w-0 p-3 sm:p-6 overflow-y-auto order_details_block" cdkScrollable>
+    <div class="grid grid-cols-12 gap-2">
+        <div class=" px-1 col-span-12 lg:col-span-8 xl:col-span-9 od__order-details">
+
+            <div class="sm:col-span-6 p-5 flex flex-col flex-auto bg-card shadow overflow-hidden">
+                <p class="text-xl font-bold">Order #1497</p>
+                <div class="flex items-center mt-6">
+                    <div class="flex-1 h-2 bg-[#00E0AC]"></div>
+                    <div class="flex-1 h-2 bg-black bg-opacity-10 mx-1"></div>
+                    <div class="flex-1 h-2 bg-black bg-opacity-10 mx-1"></div>
+                    <div class="flex-1 h-2 bg-black bg-opacity-10 mx-1"></div>
+                    <div class="flex-1 h-2 bg-black bg-opacity-10 mx-1"></div>
+                    <div class="flex-1 h-2 bg-black bg-opacity-10 mx-1"></div>
+                    <div class="flex-1 h-2 bg-black bg-opacity-10 "></div>
+                </div>
+
+                <ng-container *ngIf="currentState === 'Review'">
+                    <div>
+                        <p class="mt-4 ite flex items-center font-bold text-md">
+                            <mat-icon class="icon-size-5 text-black mr-2"
+                                [svgIcon]="'mat_outline:check_circle'"></mat-icon>
+                            Submitted for review
+                        </p>
+                        <p class="mt-2 text-[#222B4E]">
+                            Our team of specialists are reviewing the model defects detected in your order. Please allow
+                            2
+                            business days for an email response. If successful, payment will be required before
+                            production
+                            can commence.
+                        </p>
+                    </div>
+                </ng-container>
+
+                <ng-container *ngIf="currentState === 'ReadyForPayment'">
+                    <div>
+                        <p class="mt-4 ite flex items-center font-bold text-md">
+                            <mat-icon class="icon-size-5 text-black mr-2"
+                                [svgIcon]="'mat_outline:check_circle'"></mat-icon>
+                            Ready for payment
+                        </p>
+                        <p class="mt-2 text-[#222B4E]">
+                            Our sales team have received your order and await payment before production can commence.
+                        </p>
+                    </div>
+
+                    <div class="mt-6">
+                        <button class="btn-theme w-full sm:w-56 rounded p-4 font-semibold">
+                            <span>Make payment ($44.79)</span>
+                        </button>
+                    </div>
+                </ng-container>
+
+                <ng-container *ngIf="currentState === 'PaymentReceived'">
+                    <div>
+                        <p class="mt-4 ite flex items-center font-bold text-md">
+                            <mat-icon class="icon-size-5 text-black mr-2"
+                                [svgIcon]="'mat_outline:check_circle'"></mat-icon>
+                            Payment received
+                        </p>
+                        <p class="mt-2 text-[#222B4E]">
+                            Our sales team have received payment for your order. You will be notified by email when
+                            production commences.
+                        </p>
+                    </div>
+                </ng-container>
+
+
+                <div class="mt-4">
+                    <p class="text-xl  font-normal text-[#222B4E]">{{models?.length}} models</p>
+                </div>
+
+
+                <div>
+                    <div class="mt-6 rounded-b-lg">
+                        <div class="relative flex flex-col w-full h-full text-gray-700 ">
+
+                            <div class="overflow-scroll">
+                                <table class="w-full text-left table-auto min-w-max border">
+
+                                    <tbody>
+                                        <tr *ngFor="let model of models;let i = index">
+                                            <td>
+                                                <table class="w-full text-left table-auto min-w-max border-none">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="px-4 pt-4 pb-2 border-blue-gray-50" colspan="3">
+                                                                <div
+                                                                    class="font-bold text-lg h-16 w-16 bg-gray-100 flex justify-center items-center">
+                                                                    <img [src]="model?.thumbnail" alt="">
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr [ngClass]="{'border-b border-blue-gray-50' : models.length !== i+1}">
+                                                            <td class="px-4 pb-4 pt-2  border-blue-gray-50"
+                                                                valign="top">
+                                                                <div class="flex flex-col justify-between"
+                                                                    style="height: 160px;">
+                                                                    <div class="d-flex">
+                                                                        <div class="text-lg font-bold">
+                                                                            {{model?.model_name}}</div>
+                                                                        <div class="text-md underline mt-2 flex items-center"
+                                                                            *ngIf="model?.modelWallThickness">
+                                                                            <mat-icon
+                                                                                class="icon-size-5 text-yellow-400 mr-1"
+                                                                                [svgIcon]="'mat_solid:warning_amber'"></mat-icon>
+                                                                            Model wall thickness too thin
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td class="p-4 " valign="top">
+                                                                <ul>
+                                                                    <li>Process:</li>
+                                                                    <li>Material: </li>
+                                                                    <li>Finish:</li>
+                                                                    <li>Extras:</li>
+                                                                </ul>
+                                                            </td>
+                                                            <td class="p-4" valign="top">
+                                                                <ul>
+                                                                    <li>{{model?.processData?.process_name || '-'}}</li>
+                                                                    <li>{{model?.materialData.material_name || "-"}}
+                                                                    </li>
+                                                                    <ul>
+                                                                        <ng-container *ngFor="
+                                                                                let item of model.finishesData
+                                                                            ">
+                                                                            <li>
+                                                                                {{
+                                                                                item.finishing_name
+                                                                                }}
+                                                                            </li>
+                                                                        </ng-container>
+                                                                    </ul>
+                                                                    <ul>
+                                                                        <ng-container *ngFor="
+                                                                                let item of model.extrasData
+                                                                            ">
+                                                                            <li>
+                                                                                {{
+                                                                                item.name
+                                                                                }}
+                                                                            </li>
+                                                                        </ng-container>
+                                                                    </ul>
+
+                                                                </ul>
+                                                            </td>
+                                                            <td class="p-4 " valign="top">
+                                                                <div class="w-max">
+                                                                    <div class="flex items-center space-x-2 font-bold">
+                                                                        <span class="text-md font-bold">Qty.
+                                                                            {{model.quantity}}</span>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td  class="p-4" valign="top">
+                                                                <span *ngIf="isQuotable" class="text-md font-bold">{{model.price |
+                                                                    currency}}</span>
+                                                                    <span *ngIf="!isQuotable" class="text-md font-bold">TBD</span>
+                                                            </td>
+                                                        </tr>
+                                                        <!-- <tr
+                                                            [ngClass]="{'border-b border-blue-gray-50' : models.length !== i+1}">
+                                                            <div class="d-flex px-4 py-2">
+                                                                <span>{{model.price / model.quantity| currency}} per part</span>
+                                                            </div>
+                                                        </tr> -->
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="my-4">
+
+                <div>
+                    <p class="text-xl font-bold">Order details</p>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-5 sm:gap-4 mt-4">
+                        <div>
+                            <p class="text-md text-[#222B4E] font-bold">Contact</p>
+                            <p class="text-[#222B4E] mt-1">{{loggedInUserData?.first_name}}
+                                {{loggedInUserData?.last_name}}</p>
+                            <p class="text-[#222B4E]">{{loggedInUserData?.email}}</p>
+                            <p class="text-[#222B4E]">{{loggedInUserData?.phone}}</p>
+                            <p class="text-[#222B4E] mt-2">Additional contacts:</p>
+                            <p class="text-[#222B4E]">{{quotation?.contact_details?.additional_email}}</p>
+                        </div>
+                        <div>
+                            <p class="text-md text-[#222B4E] font-bold">Delivery</p>
+                            <p class="text-[#222B4E] mt-1">Ship to address:</p>
+                            <p class="text-[#222B4E]">{{quotation?.delivery_details?.street_1}}</p>
+                            <p class="text-[#222B4E]">{{quotation?.delivery_details?.city}}</p>
+                            <p class="text-[#222B4E]">{{quotation?.delivery_details?.pincode}}</p>
+                            <p class="text-[#222B4E]">{{quotation?.delivery_details?.country}}</p>
+                            <p class="text-[#222B4E] mt-2">Shipping method:</p>
+                            <p class="text-[#222B4E]">{{quotation?.delivery_details?.shipping_method}}</p>
+
+                        </div>
+                        <div>
+                            <p class="text-md text-[#222B4E] font-bold">Billing</p>
+                            <p class="text-[#222B4E] mt-1">{{quotation?.billing_contact_details?.first_name}}
+                                {{quotation?.billing_contact_details?.last_name}}</p>
+                            <p class="text-[#222B4E]">{{quotation?.billing_contact_details?.email}} </p>
+                            <p class="text-[#222B4E]">{{quotation?.billing_contact_details?.phone_number}} </p>
+                            <p class="text-[#222B4E] mt-2">{{quotation?.shipping_details?.street_1}}</p>
+                            <p class="text-[#222B4E]">{{quotation?.shipping_details?.city}}</p>
+                            <p class="text-[#222B4E]">{{quotation?.shipping_details?.pincode}}</p>
+                            <p class="text-[#222B4E]">{{quotation?.shipping_details?.country}}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <hr *ngIf="currentState === 'PaymentReceived'" class="my-4">
+
+                <div *ngIf="currentState === 'PaymentReceived'">
+                    <p class="text-xl font-bold">Payment</p>
+                    <div class=" mt-4">
+                        <p class="text-[#222B4E] mt-1">Paid with credit card:</p>
+                        <p class="text-[#222B4E]">Mastercard (...4242)</p>
+                        <p class="text-[#222B4E] mt-2">Amount:</p>
+                        <p class="text-[#222B4E]">$44.79</p>
+                    </div>
+                </div>
+
+                <hr class="my-4">
+
+                <div>
+                    <ng-container *ngIf="isDocumentDisabled">
+                        <div class="flex justify-between">
+                            <span class="text-xl font-bold">Notes</span>
+                            <span>
+                                <button (click)="onToggeleEdit()" mat-flat-button>
+                                    <mat-icon class="icon-size-5" [svgIcon]="'mat_outline:edit'"></mat-icon>
+                                    <span class="ml-2 hidden sm:block underline">Edit</span>
+                                </button>
+                            </span>
+                        </div>
+                        <p class="mb-2">{{quotation?.notes}}</p>
+                        <ng-container *ngFor="let doc of quotation?.documents">
+                            <li class="flex items-center">
+                                <mat-icon svgIcon="heroicons_outline:paper-clip" class="mr-1"></mat-icon>
+                                <a (click)="openDocument(doc.document_link)" class="underline cursor-pointer">{{
+                                    doc.document_name }}</a>
+                            </li>
+                        </ng-container>
+                    </ng-container>
+
+                    <div *ngIf="!isDocumentDisabled"
+                        class="sm:col-span-6 flex flex-col flex-auto p-6 bg-card shadow overflow-hidden">
+                        <div class="flex justify-between">
+                            <span class="text-xl font-bold">Notes</span>
+                            <span>
+                                <button (click)="onToggeleEdit('save')" mat-flat-button>
+                                    <mat-icon class="icon-size-5" [svgIcon]="'feather:save'"></mat-icon>
+                                    <span class="ml-2 hidden sm:block underline">Save</span>
+                                </button>
+                                <button (click)="onToggeleEdit('Cancel')" mat-flat-button>
+                                    <mat-icon class="icon-size-5" [svgIcon]="'mat_outline:cancel'"></mat-icon>
+                                    <span class="ml-2 hidden sm:block underline">Cancel</span>
+                                </button>
+                            </span>
+                        </div>
+
+                        <div class="mt-2">
+                            <div class="font-bold">
+                                Additional notes for our team
+                                <span class="text-slate-400 font-normal">
+                                    (optional)</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col flex-auto mt-2 overflow-x-auto">
+                            <mat-form-field class="w-full">
+                                <textarea matInput placeholder="Put your notes here if necessary (link allowed)"
+                                    [(ngModel)]="notes"></textarea>
+                            </mat-form-field>
+                        </div>
+
+                        <div *ngIf="documents.length > 0" class="my-3">
+                            <h3 class="font-bold">Uploaded Files:</h3>
+                            <ul class="mt-2">
+
+                                <ng-container *ngFor="let doc of documents">
+                                    <li class="flex items-center">
+                                        <mat-icon svgIcon="heroicons_outline:paper-clip" class="mr-1"></mat-icon>
+                                        <a (click)="openDocument(doc.document_link)" class="underline cursor-pointer">{{
+                                            doc.document_name }}</a>
+                                        <button *ngIf="!isAllfieldDisabled" mat-icon-button
+                                            (click)="removeDocument(i)"><mat-icon class="icon-size-5"
+                                                svgIcon="feather:trash"></mat-icon></button>
+                                    </li>
+                                </ng-container>
+
+                            </ul>
+                        </div>
+
+                        <div class="mt-2">
+                            <label for="uploadFile1" class="mr-2">
+                                <a class="bg-white border-2 border-[#00E0AC] rounded p-3 hover:bg-slate-50">
+                                    <span class="inline-flex items-center">
+                                        <span class="font-bold">
+                                            Attach File
+                                            <input type="file" id="uploadFile1" (change)="onFileSelected($event)"
+                                                multiple class="hidden" />
+                                        </span>
+                                    </span>
+                                </a>
+                            </label>
+                        </div>
+                    </div>
+
+
+                    <div class="w-1/4 mt-4">
+                        <form [formGroup]="projectForm" class="flex flex-col items-start">
+                            <div class="text-xl sm:mb-4 font-bold tracking-tight leading-6 truncate">
+                                Project
+                            </div>
+
+                            <div class="mt-2" *ngIf="!isNewProject && !isDocumentDisabled">
+                                <p class="underline" *ngIf="!isAllfieldDisabled" (click)="onNewProject()">Create a new project</p>
+                            </div>
+                            <div class="w-full mt-2">
+                                <mat-form-field class="w-full col-lg-6">
+                                    <mat-label>Assign to a project</mat-label>
+                                    <mat-select [placeholder]="'Not assigned to project'"
+                                        [formControlName]="'project_id'">
+                                        <mat-option [value]="project?._id"
+                                            *ngFor="let project of projectList">{{project?.name }}</mat-option>
+                                    </mat-select>
+                                    <mat-error>project is required!</mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <div *ngIf="isNewProject && !isDocumentDisabled" class="w-full">
+                                <mat-form-field class="w-full  col-lg-6">
+                                    <mat-label>Project Name</mat-label>
+                                    <input matInput [formControlName]="'name'">
+                                    <mat-error>Project name is required!</mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <div *ngIf="isNewProject && !isDocumentDisabled" class="w-full flex items-center gap-2">
+                                <mat-form-field class="w-full col-lg-6">
+                                    <mat-label>Project start date</mat-label>
+                                    <input [matDatepicker]="picker1" matInput [formControlName]="'start_date'">
+                                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker1></mat-datepicker>
+                                    <mat-error>Expiry is required!</mat-error>
+                                </mat-form-field>
+
+                                <button type="button" (click)="saveNewProject()"
+                                    class="ml-auto mr-4 border w-24 h-12 rounded-lg font-bold bg-[#00E0AC]"> Save
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+
+
+
+                </div>
+
+
+
+            </div>
+
+            <div class="px-2 col-span-12 lg:col-span-4 xl:col-span-3 od__side_invoice mt-4">
+
+                <div *ngIf="isQuotable" class="sm:col-span-6 flex flex-col flex-auto p-6 bg-card shadow  overflow-hidden">
+                    <div class="mt-0">
+                        <div class="flex justify-between text-[#222B4E]">
+                            <p for="Price" class="text-xl font-bold mb-4">Summary</p>
+                            <label class="text-xl font-bold">{{totalCost | currency}}</label>
+                        </div>
+                        <div class="flex justify-between mb-2 ">
+                            <span class="text-md font-bold text-[#222B4E]">Parts{{totalQuantity}}</span>
+                            <span class="text-md  text-[#222B4E]">{{partsTotalCost + processAppliedCost | currency}}</span>
+                        </div>
+
+
+                    <div class="flex justify-between mb-2">
+                        <span class="text-md font-bold text-[#222B4E]">Promotion</span>
+                        <span class="text-md text-[#222B4E]">-{{promotionCost + processAppliedCost | currency}}</span>
+                    </div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-md font-bold text-[#222B4E]">Delivery fees</span>
+                            <span class="text-md text-[#222B4E]">{{deliveryFee | currency}}</span>
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-md font-bold text-[#222B4E]">Subtotal</span>
+                            <span class="text-md text-[#222B4E]">{{subTotalCost | currency}}</span>
+                        </div>
+
+                        <div class="flex justify-between mb-2">
+                            <span class="text-md font-bold text-[#222B4E]">GST (10%)</span>
+                            <span class=" text-[#222B4E]">{{gstCost | currency}}</span>
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-md font-bold text-[#222B4E]">Total</span>
+                            <span class="text-md font-bold text-[#222B4E]">{{totalCost | currency}}</span>
+                        </div>
+
+                        <hr class="mb-2">
+                        <div class="mt-6">
+                            <button (click)="viewQuote()"
+                                class="border w-full rounded p-4 font-semibold hover:bg-slate-50 border-[#00E0AC] rounded-sm">
+                                <span>View quote</span>
+                            </button>
+                        </div>
+
+                        <div class="mt-6">
+                            <button (click)="updateQuotation(true)"
+                                class="border w-full rounded p-4 font-semibold hover:bg-slate-50 border-red-400 rounded-sm">
+                                <span>Cancel quote</span>
+                            </button>
+                        </div>
+
+                        <div *ngIf="false" class="mt-6">
+                            <button
+                                class="border w-full rounded p-4 font-semibold hover:bg-slate-50 border-[#00E0AC] rounded-sm">
+                                <span>View invoice</span>
+                            </button>
+                        </div>
+
+                        <div class="mt-6">
+                            <p>
+                                Your quote is unavailable while the order is under review.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngIf="!isQuotable" class="sm:col-span-6 flex flex-col flex-auto p-6 bg-card shadow  overflow-hidden">
+                    <div class="mt-0">
+                        <div class="flex justify-between text-[#222B4E]">
+                            <p for="Price" class="text-xl font-bold mb-4">Summary</p>
+                        </div>
+
+                        <p>Your order is currently being reviewed and a quote is being prepared. We will contact you shortly.</p>
+                        <hr class="mb-2">
+                        <div class="mt-6">
+                            <p>
+                                Your quote is unavailable while the order is under review.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

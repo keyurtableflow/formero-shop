@@ -1,0 +1,123 @@
+<div
+    class="w-full flex sm:flex-col sm:flex-auto items-center sm:justify-center min-w-0 bg-card sm:bg-gray-100"
+>
+    <div class="w-full sm:w-6/12 md:w-4/12 sm:shadow sm:bg-card rounded">
+        <div class="w-full mx-auto sm:mx-0">
+            <div class="flex justify-center border-b p-4">
+                <img class="w-44" src="assets/images/logo/logo.svg" />
+            </div>
+
+            <div class="p-8">
+                <div
+                    class="text-2xl font-extrabold tracking-tight leading-tight"
+                >
+                    Log in
+                </div>
+                <div class="flex items-baseline mt-4 font-medium">
+                    <div>New to Formero?</div>
+                    <a class="ml-1 underline" [routerLink]="['/sign-up']"
+                        >Create an account
+                    </a>
+                </div>
+
+                <!-- Alert -->
+                <fuse-alert
+                    class="mt-8"
+                    *ngIf="showAlert"
+                    [appearance]="'outline'"
+                    [showIcon]="false"
+                    [type]="alert.type"
+                    [@shake]="alert.type === 'error'"
+                >
+                    {{ alert.message }}
+                </fuse-alert>
+
+                <!-- Sign in form -->
+                <form
+                    class="mt-8"
+                    [formGroup]="signInForm"
+                    #signInNgForm="ngForm"
+                >
+                    <!-- Email field -->
+                    <mat-label class="font-bold">
+                        <p class="mb-4">Email address</p></mat-label
+                    >
+                    <mat-form-field class="w-full">
+                        <input
+                            id="phone"
+                            matInput
+                            [formControlName]="'phone'"
+                        />
+                        <mat-error> Email is required </mat-error>
+                    </mat-form-field>
+
+                    <!-- Password field -->
+                    <mat-label>
+                        <div class="mb-4">
+                            <p class="font-bold">Password</p>
+                            <p>
+                                If you’re having trouble,
+                                <a
+                                    class="underline"
+                                    [routerLink]="['/forgot-password']"
+                                    >reset your password
+                                </a>
+                            </p>
+                        </div>
+                    </mat-label>
+                    <mat-form-field class="w-full lg_password">
+                        <input
+                            id="password"
+                            matInput
+                            type="password"
+                            [formControlName]="'password'"
+                            #passwordField
+                        />
+                        <button
+                            mat-icon-button
+                            type="button"
+                            (click)="
+                                passwordField.type === 'password'
+                                    ? (passwordField.type = 'text')
+                                    : (passwordField.type = 'password')
+                            "
+                            matSuffix
+                        >
+                            <mat-icon
+                                class="icon-size-5"
+                                *ngIf="passwordField.type === 'password'"
+                                [svgIcon]="'heroicons_solid:eye'"
+                            ></mat-icon>
+                            <mat-icon
+                                class="icon-size-5"
+                                *ngIf="passwordField.type === 'text'"
+                                [svgIcon]="'heroicons_solid:eye-slash'"
+                            ></mat-icon>
+                        </button>
+                        <mat-error> Password is required </mat-error>
+                    </mat-form-field>
+
+                    <!-- Submit button -->
+                    <button
+                        class="w-full bg-[#00E0AC] p-4 mt-6 rounded"
+                        [disabled]="signInForm.disabled"
+                        (click)="signIn()"
+                    >
+                        <span class="font-bold" *ngIf="!signInForm.disabled">
+                            Log in
+                        </span>
+                        <p
+                            class="flex justify-center"
+                            *ngIf="signInForm.disabled"
+                        >
+                            <mat-progress-spinner
+                                [diameter]="24"
+                                [mode]="'indeterminate'"
+                            ></mat-progress-spinner>
+                        </p>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

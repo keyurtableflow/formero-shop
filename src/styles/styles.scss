@@ -1,0 +1,224 @@
+/* ----------------------------------------------------------------------------------------------------- */
+/*  @ Import/write your custom styles here.
+/*  @ Styles from this file will override 'vendors.scss' and Formero's base styles.
+/* ----------------------------------------------------------------------------------------------------- */
+// Responsive Styles
+// Header
+// Responsive Styles
+app-header {
+    height: auto !important;
+}
+
+.text-content {
+    font-weight: 400;
+    text-align: left;
+    color: #222b4e;
+}
+
+.header_block_tab {
+    padding-block: 10px;
+
+    .mat-mdc-tab-label-container {
+        box-shadow: none !important;
+    }
+
+    .text-content {
+        font-size: 14px;
+        line-height: 20px;
+        border-bottom: 1px solid #222b4e;
+    }
+
+    .mdc-tab--active {
+        .text-content {
+            border-bottom: 1px solid transparent;
+            font-weight: 700;
+        }
+    }
+}
+
+// Order Details
+
+.order_details_block {
+    .text-content {
+        font-size: 20px !important;
+        line-height: 32px;
+    }
+
+    .od__order-details {
+        @media screen and (width >=1280px) {
+            width: calc(100dvw - 27.5dvw) !important;
+        }
+    }
+
+    .od__side_invoice {
+        @media screen and (width >=1280px) {
+            position: fixed !important;
+            top: 132px;
+            width: calc(100dvw - 75dvw);
+            max-width: 100%;
+            right: 11px;
+        }
+    }
+}
+
+.mat-form-field-invalid {
+    .mat-mdc-text-field-wrapper {
+        .mat-mdc-form-field-flex {
+            background-color: #e000000d !important;
+        }
+    }
+}
+
+.mdc-radio__outer-circle {
+    border-color: #00e0ac !important;
+}
+
+.mdc-radio__inner-circle {
+    border-color: #00e0ac !important;
+}
+
+.mat-mdc-checkbox-checked {
+    .mdc-form-field {
+        .mdc-checkbox {
+            .mdc-checkbox__background {
+                border-color: #00e0ac !important;
+                background-color: #00e0ac !important;
+            }
+        }
+    }
+}
+
+.mat-form-field-disabled {
+    .mat-mdc-text-field-wrapper {
+        .mat-mdc-form-field-flex {
+            background-color: rgba(0, 0, 0, 0.05);
+
+            .mat-mdc-form-field-infix {
+                .mdc-floating-label {
+                    color: #000000 !important;
+                }
+                .mat-mdc-input-element {
+                    color: #646b83;
+                }
+            }
+        }
+    }
+}
+
+.mat-mdc-progress-bar {
+    --mdc-linear-progress-active-indicator-color: #0de1af !important;
+    --mdc-linear-progress-track-color: #cef6ed !important;
+}
+
+.invalid_field {
+    .mat-mdc-text-field-wrapper {
+        .mat-mdc-form-field-flex {
+            background-color: rgb(255, 239, 239);
+            border: 0.5px solid red;
+        }
+    }
+}
+
+.float-right {
+    float: right;
+}
+
+.add-icon-box {
+    &.small-add-icon-box {
+        width: 52px !important;
+        height: 52px !important;
+        display: inline-block;
+    }
+}
+.order-block {
+    max-height: calc(100vh - 550px);
+    overflow-y: auto;
+}
+.right-col {
+        max-height: calc(100vh - 400px);
+        overflow-y: auto;
+}
+.process-col {
+    &.active-box {
+        background-color: rgba(0, 224, 172, 0.05);
+        border: 2px solid rgba(0, 224, 172, 1) !important;
+    }
+}
+
+.process-block{
+    max-height: 260px;
+    overflow: hidden;
+    &.add-scroll{
+        overflow-y: auto;
+        max-height: 520px;
+    }
+
+}
+
+.process-block-col {
+    display: flex;
+    flex-direction: column;
+    max-height: 100%;
+    overflow: hidden;
+
+    &.expanded {
+      max-height: 555px;
+      overflow-y: auto;
+    }
+
+    &.collapsed {
+      height: auto;
+      overflow: hidden;
+    }
+
+    .header-container {
+      background-color: white;
+      width: 100%; /* Ensure the header takes the full width */
+      position: sticky;
+      top: 0;
+      z-index: 10; /* Ensure the header stays on top */
+      padding: 0.5rem; /* Add some padding for better spacing */
+    }
+
+    .process-col {
+      width: 100%;
+    }
+  }
+
+
+.info-icon svg {
+    width: 15px;
+    height: 15px;
+}
+
+.warning-icon {
+    vertical-align: text-bottom;
+    color: #ffb200;
+}
+
+.view-arrow {
+    vertical-align: middle;
+}
+.mat-mdc-snack-bar-container {
+    border-radius: 6px;
+
+    .mdc-snackbar__surface {
+        background-color: transparent !important;
+
+        .mat-mdc-snack-bar-label {
+            color: #000 !important;
+        }
+    }
+
+    &.success {
+        background-color: #eeffe8 !important;
+        border: 1px solid #bdffa3;
+        color: #000 !important;
+    }
+
+    &.error {
+        background-color: #fff4f4 !important;
+        border: 1px solid #ffbaba;
+        color: #000 !important;
+    }
+}

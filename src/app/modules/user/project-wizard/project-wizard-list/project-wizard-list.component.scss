@@ -1,0 +1,7 @@
+.projectWizard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(48px, 1fr));
+  }
+.mat-mdc-menu-item{
+  min-height: 36px !important;
+}

@@ -1,0 +1,367 @@
+<div
+    class="w-full flex sm:flex-col sm:flex-auto items-center sm:justify-center min-w-0 bg-card sm:bg-gray-100"
+>
+    <div class="w-full sm:w-6/12 md:w-4/12 sm:shadow sm:bg-card rounded">
+        <div *ngIf="!userDetails" class="w-full mx-auto sm:mx-0">
+            <div class="flex justify-center border-b p-4">
+                <img class="w-44" src="assets/images/logo/logo.svg" />
+            </div>
+
+            <div class="p-8">
+                <div
+                    class="text-2xl font-extrabold tracking-tight leading-tight"
+                >
+                    Create account
+                </div>
+                <div class="flex items-baseline mt-4 font-medium">
+                    <div>Have an account already?</div>
+                    <a class="ml-1 underline" [routerLink]="['/sign-in']"
+                        >Log in
+                    </a>
+                </div>
+
+                <!-- Alert -->
+                <!-- <fuse-alert
+                    class="mt-8"
+                    *ngIf="showAlert"
+                    [appearance]="'outline'"
+                    [showIcon]="false"
+                    [type]="alert.type"
+                    [@shake]="alert.type === 'error'"
+                >
+                    {{ alert.message }}
+                </fuse-alert> -->
+
+                <!-- Sign in form -->
+                <form
+                    class="mt-6"
+                    [formGroup]="signUpForm"
+                    #signInNgForm="ngForm"
+                >
+                    <div class="flex flex-col lg:flex-row items-center">
+                        <div class="w-full lg:mr-3">
+                            <mat-label class="font-bold">
+                                <p class="mb-2">First name</p>
+                            </mat-label>
+                            <mat-form-field class="w-full fuse-mat-dense">
+                                <input
+                                    matInput
+                                    [formControlName]="'first_name'"
+                                />
+                                <mat-error class="flex items-center">
+                                    <mat-icon
+                                        class="icon-size-5 text-red-400 mr-1"
+                                        [svgIcon]="'mat_solid:warning_amber'"
+                                    ></mat-icon>
+                                    First name is required
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="w-full">
+                            <mat-label class="font-bold">
+                                <p class="mb-2">Last name</p>
+                            </mat-label>
+                            <mat-form-field class="w-full fuse-mat-dense">
+                                <input
+                                    matInput
+                                    [formControlName]="'last_name'"
+                                />
+                                <mat-error class="flex items-center"
+                                    ><mat-icon
+                                        class="icon-size-5 text-red-400 mr-1"
+                                        [svgIcon]="'mat_solid:warning_amber'"
+                                    ></mat-icon>
+                                    Last name is required</mat-error
+                                >
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <mat-label class="font-bold">
+                        <p class="mb-2">Email address</p>
+                    </mat-label>
+                    <mat-form-field class="w-full fuse-mat-dense">
+                        <input
+                            id="email"
+                            matInput
+                            [formControlName]="'email'"
+                        />
+                        <mat-error
+                            class="flex items-center"
+                            *ngIf="signUpForm.get('email').hasError('required')"
+                        >
+                            <mat-icon
+                                class="icon-size-5 text-red-400 mr-1"
+                                [svgIcon]="'mat_solid:warning_amber'"
+                            ></mat-icon>
+                            Email address is required
+                        </mat-error>
+                        <mat-error
+                            class="flex items-center"
+                            *ngIf="signUpForm.get('email').hasError('email')"
+                        >
+                            <mat-icon
+                                class="icon-size-5 text-red-400 mr-1"
+                                [svgIcon]="'mat_solid:warning_amber'"
+                            ></mat-icon>
+                            Email address invalid
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-label class="font-bold">
+                        <span>Mobile phone number</span>
+                    </mat-label>
+                    <p class="my-1">
+                        You'll be sent a one-time code to create an account
+                    </p>
+                    <div class="flex">
+                        <mat-form-field class="mr-3 code-field">
+                            <mat-select [formControlName]="'countryCode'">
+                                <mat-option
+                                    *ngFor="let country of countryList"
+                                    [value]="country.dial_code"
+                                >
+                                    {{ country.name }} ({{ country.dial_code }})
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field class="w-full">
+                            <input
+                                type="text"
+                                matInput
+                                [formControlName]="'phone'"
+                            />
+                            <mat-error
+                                class="flex items-center"
+                                *ngIf="
+                                    signUpForm.get('phone').hasError('required')
+                                "
+                            >
+                                <mat-icon
+                                    class="icon-size-5 text-red-400 mr-1"
+                                    [svgIcon]="'mat_solid:warning_amber'"
+                                ></mat-icon
+                                >Mobile phone number is required!</mat-error
+                            >
+                            <mat-error
+                                class="flex items-center"
+                                *ngIf="
+                                    signUpForm.get('phone').hasError('pattern')
+                                "
+                                ><mat-icon
+                                    class="icon-size-5 text-red-400 mr-1"
+                                    [svgIcon]="'mat_solid:warning_amber'"
+                                ></mat-icon>
+                                Mobile phone number invalid</mat-error
+                            >
+                        </mat-form-field>
+                    </div>
+
+                    <!-- Password field -->
+                    <mat-label class="font-bold">
+                        <span>Password</span>
+                    </mat-label>
+                    <p class="my-1">Minimum 10 characters required</p>
+                    <mat-form-field class="w-full fuse-mat-dense lg_password">
+                        <input
+                            id="password"
+                            matInput
+                            type="password"
+                            [formControlName]="'password'"
+                            #passwordField
+                        />
+                        <button
+                            mat-icon-button
+                            type="button"
+                            (click)="
+                                passwordField.type === 'password'
+                                    ? (passwordField.type = 'text')
+                                    : (passwordField.type = 'password')
+                            "
+                            matSuffix
+                        >
+                            <mat-icon
+                                class="icon-size-5"
+                                *ngIf="passwordField.type === 'password'"
+                                [svgIcon]="'heroicons_solid:eye'"
+                            ></mat-icon>
+                            <mat-icon
+                                class="icon-size-5"
+                                *ngIf="passwordField.type === 'text'"
+                                [svgIcon]="'heroicons_solid:eye-slash'"
+                            ></mat-icon>
+                        </button>
+                        <mat-error
+                            class="flex items-center"
+                            *ngIf="
+                                signUpForm.get('password').hasError('required')
+                            "
+                        >
+                            <mat-icon
+                                class="icon-size-5 text-red-400 mr-1"
+                                [svgIcon]="'mat_solid:warning_amber'"
+                            ></mat-icon>
+                            Password is required.
+                        </mat-error>
+                        <mat-error
+                            class="flex items-center"
+                            *ngIf="
+                                signUpForm.get('password').hasError('minLength')
+                            "
+                        >
+                            <mat-icon
+                                class="icon-size-5 text-red-400 mr-1"
+                                [svgIcon]="'mat_solid:warning_amber'"
+                            ></mat-icon>
+                            Password must contain minimum 10 characters
+                        </mat-error>
+                    </mat-form-field>
+
+                    <!-- Submit button -->
+                    <!-- [disabled]="signUpForm.disabled" -->
+                    <button
+                        class="w-full bg-[#00E0AC] p-4 mt-3 rounded"
+                        (click)="signUp()"
+                    >
+                        <span class="font-bold" *ngIf="!signUpForm.disabled">
+                            Create account
+                        </span>
+                        <p
+                            class="flex justify-center"
+                            *ngIf="signUpForm.disabled"
+                        >
+                            <mat-progress-spinner
+                                [diameter]="24"
+                                [mode]="'indeterminate'"
+                            ></mat-progress-spinner>
+                        </p>
+                    </button>
+                </form>
+                <p class="text-[#646B83] mt-4">
+                    By creating an account you agree to our
+                    <a class="underline">terms and conditions</a> and
+                    <a class="underline"> privacy policy.</a>
+                </p>
+            </div>
+        </div>
+
+        <div *ngIf="userDetails" class="w-full mx-auto sm:mx-0">
+            <div class="flex justify-center border-b p-4">
+                <img class="w-44" src="assets/images/logo/logo.svg" />
+            </div>
+
+            <div class="p-8">
+                <div
+                    class="text-2xl font-extrabold tracking-tight leading-tight"
+                >
+                    Verify account
+                </div>
+                <div class="mt-8 font-medium">
+
+                    <div>To create your account, enter the one-time code sent to:</div>
+                    <a>+61-489-298-089 <span class="underline hover:cursor-pointer">(edit)</span></a>
+                    <a
+                        >{{ userDetails.code }}
+                        {{ userDetails.phone }}
+                        <span class="underline hover:cursor-pointer"
+                            >(edit)</span
+                        ></a
+                    >
+                </div>
+
+                <!-- <fuse-alert
+                    class="mt-8"
+                    *ngIf="showAlert"
+                    [appearance]="'outline'"
+                    [showIcon]="false"
+                    [type]="alert.type"
+                    [@shake]="alert.type === 'error'"
+                >
+                    {{ alert.message }}
+                </fuse-alert> -->
+
+                <form
+                    class="mt-6 mb-4"
+                    [formGroup]="verifyAccountForm"
+                    #VerifyAccountForm="ngForm"
+                >
+                    <mat-label>
+                        <div class="mb-2">
+                            <p class="font-bold">One-time code</p>
+                            <p>
+                                6-digit-code, If you're having trouble,
+                                <span
+                                    class="underline hover:cursor-pointer"
+                                    (click)="requestNewOTP()"
+                                    >request a new code.</span
+                                >
+                                <span> {{ otpStatus }}</span>
+                            </p>
+                        </div>
+                    </mat-label>
+                    <mat-form-field
+                        [ngClass]="{
+                            invalid_field:
+                                !isOtpInvalid &&
+                                !verifyAccountForm
+                                    .get('otp')
+                                    .hasError('required')
+                        }"
+                        class="w-full"
+                    >
+                        <input matInput [formControlName]="'otp'" />
+                        <mat-error
+                            *ngIf="
+                                verifyAccountForm
+                                    .get('otp')
+                                    .hasError('required')
+                            "
+                            class="flex items-center"
+                        >
+                            <mat-icon
+                                class="icon-size-5 text-red-400 mr-1"
+                                [svgIcon]="'mat_solid:warning_amber'"
+                            ></mat-icon>
+                            One-time code is required.
+                        </mat-error>
+                    </mat-form-field>
+                    <div
+                        *ngIf="
+                            !isOtpInvalid &&
+                            !verifyAccountForm.get('otp').hasError('required')
+                        "
+                        class="flex items-center"
+                    >
+                        <mat-icon
+                            class="icon-size-5 text-red-400 mr-1"
+                            [svgIcon]="'mat_solid:warning_amber'"
+                        ></mat-icon>
+                        One-time code is invalid.
+                    </div>
+                    <button
+                        class="w-full bg-[#00E0AC] p-4 mt-4"
+                        [disabled]="verifyAccountForm.disabled"
+                        (click)="verifyAccount()"
+                    >
+                        <span
+                            class="font-bold"
+                            *ngIf="!verifyAccountForm.disabled"
+                        >
+                            Verify account
+                        </span>
+                        <p
+                            class="flex justify-center"
+                            *ngIf="verifyAccountForm.disabled"
+                        >
+                            <mat-progress-spinner
+                                [diameter]="24"
+                                [mode]="'indeterminate'"
+                            ></mat-progress-spinner>
+                        </p>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

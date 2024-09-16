@@ -1,0 +1,58 @@
+<div
+    class="upload-models w-full"
+    (dragover)="onDragOver($event)"
+    (dragleave)="onDragLeave($event)"
+    (drop)="onDrop($event)"
+>
+    <div
+        class="p-3 sm:p-6 text-center mt-[100px] sm:mt-0 sm:w-[50%] sm:h-[50%] static sm:absolute top-[50%] left-[50%] sm:-translate-x-1/2 sm:-translate-y-1/2"
+    >
+        <div
+            class="drag-and-drop-order mt-0 mb-[24px] ml-auto mr-auto w-[48px] h-[48px] bg-[#D9D9D9]"
+        ></div>
+        <h3 class="text-[20px] font-bold leading-[32px] text-[#222B4E]">
+            Add or drag-and-drop models to order
+        </h3>
+        <p class="text-[14px] mt-[24px] leading-[20px] text-[#222B4E]">
+            Compatible files: STL, OBJ, WRL, STEP (STP), IGES (IGS), 3MF, DXF,
+            DWG, and ZIP (file bundle). <br />
+            Maximum 200 MB per file.
+        </p>
+        <p class="text-[12px] mt-[24px] leading-[16px] text-[#bfc2cc]">
+            By uploading files you agree to our
+            <span class="cursor-pointer underline">terms and conditions.</span>
+            <br />
+            Your privacy and intellectual property matters, learn more.
+        </p>
+    </div>
+
+    <div
+        class="add-models-to-order bg-white border-r-4 p-[24px] absolute bottom-[24px] left-[50%] ml-[-94px] text-center"
+    >
+        <h6
+            class="text-[14px] font-bold leading-[20px] mb-[24px] text-[#222B4E]"
+        >
+            Add models to order
+        </h6>
+        <div
+            class="add-icon-box bg-[#00E0AC] w-full h-[52px] pt-[14px] cursor-pointer"
+            (click)="fileInput.click()"
+        >
+            <mat-icon
+                class="w-[21px] h-[20px] ml-auto mr-auto text-[#222B4E]"
+                [svgIcon]="'feather:plus'"
+            >
+            </mat-icon>
+        </div>
+    </div>
+
+    <!-- Hidden file input element -->
+    <input
+        type="file"
+        accept=".zip, .stl, .obj, .gltf, .wrl, .glb"
+        #fileInput
+        multiple
+        (change)="onFileSelected($event)"
+        style="display: none"
+    />
+</div>

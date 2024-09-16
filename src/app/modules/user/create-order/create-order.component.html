@@ -1,0 +1,552 @@
+<div class="customise-order w-full p-6">
+    <div class="grid grid-cols-12 h-full gap-5">
+        <div class="col-span-12 h-full lg:col-span-8 xl:col-span-9">
+            <div class="relative h-full">
+                <div class="canvas-top-part h-full">
+                    <app-modelviewer *ngIf="filesList?.length > 0 || files" [isInDialog]="false" [files]="files"
+                        [degree]="degree" [printerSize]="printerSize"
+                        (onCoordinatePosition)="updateXYXPosition($event)" (thumbnail)="onThumbnail($event)"></app-modelviewer>
+
+                    <!-- <div class="left-icon inline-block fixed top-[50%] left-0 mt-[-78px]">
+                        <ul>
+                            <li class="bg-white rounded-t-[4px] p-6 cursor-pointer">
+                                <mat-icon svgIcon="mat_outline:filter_tilt_shift"></mat-icon>
+                            </li>
+                            <li class="bg-white rounded-b-[4px] p-6 mt-[2px] cursor-pointer">
+                                <mat-icon svgIcon="mat_outline:camera_alt"></mat-icon>
+                            </li>
+                        </ul>
+                    </div> -->
+                    <div class="w-full sm:absolute bottom-[0]">
+                        <div class="grid justify-items-center">
+                            <div class="p-[24px] bg-white border-r-4 min-w-[22em] rounded-md">
+                                <div class="flex justify-between">
+                                    <h6 class="text-[14px] font-bold leading-[20px] mb-[24px] text-[#222B4E]">
+                                        Add to your cart
+                                    </h6>
+                                    <span *ngIf="filesList.length > 0"
+                                        class="text-[14px] leading-[20px] mb-[24px] text-[#222B4E]">{{ filesList?.length
+                                        }}
+                                        {{
+                                        filesList?.length > 1
+                                        ? "files"
+                                        : "file"
+                                        }}</span>
+                                </div>
+
+                                <div class="overflow-auto max-w-[1200px]">
+
+                                    <div
+                                        class="flex justify-center items-center models-icon text-center whitespace-nowrap gap-4">
+                                        <button (click)="addFile.click()"
+                                            class="bg-[#00E0AC] h-[3.8em] w-[3.8em] cursor-pointer text-center rounded-md">
+
+                                            <mat-icon *ngIf="!isModelUploding" class="text-[#222B4E]"
+                                                [svgIcon]="'feather:plus'">
+                                            </mat-icon>
+
+
+                                            <p class="flex justify-center" *ngIf="isModelUploding">
+                                                <mat-progress-spinner [diameter]="24"
+                                                    [mode]="'indeterminate'"></mat-progress-spinner>
+                                            </p>
+                                        </button>
+
+
+                                        <input type="file" id="uploadFile1" multiple
+                                            accept=".zip, .stl, .obj, .gltf, .wrl, .glb" (change)="onFileChange($event)"
+                                            class="hidden" #addFile />
+                                        <ng-container *ngFor="
+                                                let item of filesList;
+                                                let i = index
+                                            ">
+                                            <button *ngIf="!item?.is_cart" (click)="
+                                                    onFileSelected(item)
+                                                " [ngClass]="{
+                                                    'bg-[#E8EDF2]': !item?.is_cart,
+                                                    'border-[#00E0AC]': selectedItemId === item._id,
+                                                    border: selectedItemId === item._id
+                                                }"
+                                                class="inline-block bg-[#E8EDF2] h-[3.8em] w-[3.8em] cursor-pointer text-center relative rounded-md">
+                                                <mat-icon *ngIf="!item?.thumbnail && item?.thumbnail == ''" class="text-[#222B4E]" [svgIcon]="'feather:plus'">
+                                                </mat-icon>
+                                                <img [src]="item?.thumbnail" alt="">
+                                                <button (click)="removeModel(item._id)"
+                                                    class="bg-[#00E0AC] rounded-sm absolute top-0 right-0 cursor-pointer">
+                                                    <mat-icon
+                                                        class="w-[0.9em] h-[0.9em] min-w-[0.9em] min-h-[0.9em] text-[#222B4E]"
+                                                        svgIcon="mat_outline:delete_outline">
+                                                    </mat-icon>
+                                                </button>
+                                            </button>
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-span-12 h-full lg:col-span-4 xl:col-span-3 bg-white relative">
+            <div class="p-6" *ngIf="isCustomiseModelShow">
+                <div (click)="toggleAccordion()" class="flex justify-between">
+                    <p class="text-xl font-bold mb-4">Customise model</p>
+                    <div class="select-box text-xl mb-4">
+                        {{ totatCost | currency }}
+                        <svg class="w-5 h-5 inline-block transform transition-transform duration-200 cursor-pointer"
+                            [ngClass]="{ 'rotate-180': isOpen }" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="right-col">
+                    <div class="sm:col-span-6 flex flex-col flex-auto overflow-hidden" *ngIf="isOpen">
+                        <!-- <div class="mt-0"> -->
+                        <div class="flex justify-between mb-2">
+                            <span class="text-md font-bold text-slate-500 w-[40%]">Printing ({{ selectedQuantity }}
+                                {{
+                                selectedQuantity > 1 ? "parts" : "part"
+                                }})</span>
+                            <span class="text-md font-bold text-slate-500">{{
+                                printingCost | currency
+                                }}</span>
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-md text-slate-500">{{ printingCostPerPart | currency }} per
+                                part</span>
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-md font-bold text-slate-500">Startup fees</span>
+                            <span class="text-md text-slate-500">{{ startupFee | currency }}</span>
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-md font-bold text-slate-500">Extras</span>
+                            <span class="text-md text-slate-500">{{ extrasCost | currency }}</span>
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-md font-bold text-slate-500">Subtotal</span>
+                            <span class="text-md text-slate-500">{{
+                                subTotal | currency
+                                }}</span>
+                        </div>
+
+                        <div class="flex justify-between mb-2">
+                            <span class="text-md font-bold text-slate-500">GST (10%)</span>
+                            <span class="text-md font-bold text-slate-500">{{
+                                gstCost | currency
+                                }}</span>
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-md font-bold text-slate-500">Total</span>
+                            <span class="text-md font-bold text-slate-500">{{
+                                totatCost | currency
+                                }}</span>
+                        </div>
+                        <!-- </div> -->
+                    </div>
+
+                    <div class="w-full mb-6">
+                        <p class="text-[14px] leading-[20px] text-[#222B4E]">
+                            Set your production preferences.
+                        </p>
+                    </div>
+
+                    <div *ngIf="isModelUploaded" class="flex justify-between">
+                        <ng-container *ngIf="isCopyFromModelShow">
+                            <button type="submit"
+                                class="rounded h-[52px] bg-white border border-[#00E0AC] text-[14px] font-bold leading-[20px] text-[#222B4E] px-6">
+                                Copy from model
+                            </button>
+
+                            <div *ngIf="isModelUploaded && !onExpandCopyModel" class="flex items-center space-x-2"
+                                (click)="onExpandCopyModelToggle()">
+                                <div class="text-[14px] underline text-content">
+                                    3D-model-in-cart.obj
+                                </div>
+                                <svg class="w-5 h-5 inline-block transform transition-transform duration-200 cursor-pointer"
+                                    [ngClass]="{
+                                        'rotate-180': onExpandCopyModel
+                                    }" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </div>
+                        </ng-container>
+
+                        <div (click)="onExpandCopyModelToggle()" *ngIf="isModelUploaded && onExpandCopyModel"
+                            class="copy-model bg-[#E7E3E6] rounded-[8px] border-opacity-20 border-black border drop-shadow-md p-2">
+                            <ul class="relative">
+                                <li class="pl-[25px] text-[12px] leading-[20px] text-[#222B4E]">
+                                    <mat-icon class="mr-2 check-icon absolute top-0 left-0"
+                                        svgIcon="feather:check"></mat-icon>
+                                    3D-model-in-cart.obj
+                                </li>
+                                <li class="pl-[25px] text-[12px] leading-[20px] text-[#222B4E]">
+                                    3D-model-in-cart-too.obj
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Process list -->
+                    <div class="process-block-col" [ngClass]="{'expanded': showAllProcess, 'collapsed': !showAllProcess}">
+                        <!-- Header for Process List with Toggle Button -->
+                        <div (click)="toggleProcessListSize()" class="header-container  z-10 flex bg-white justify-between">
+                          <h6 class="text-[14px] font-bold leading-[20px] mb-2 text-[#222B4E]">
+                            Process
+                          </h6>
+                          <div class="select-box text-xl mb-2">
+                            <svg class="w-5 h-5 inline-block transform transition-transform duration-200 cursor-pointer"
+                                 [ngClass]="{ 'rotate-180': showAllProcess }" xmlns="http://www.w3.org/2000/svg"
+                                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7" />
+                            </svg>
+                          </div>
+                        </div>
+
+                        <!-- Process List Content -->
+                        <ng-container *ngIf="showAllProcess; else singleProcess">
+                          <ng-container *ngFor="let process of processList; let i = index">
+                            <div
+                              [ngClass]="{'active-box': i === selectedProcessIndex}"
+                              class="process-col border border-slate-300 p-6 w-full"
+                              (click)="onProcessSelected(process, i)"
+                            >
+                              <!-- Process Content -->
+                              <div class="flex justify-between items-center mb-4">
+                                <div class="w-[48px] h-[48px]">
+                                  <img crossorigin="anonymous" class="max-w-12 max-h-12" [src]="getUploadedFile(process?.image)" alt="" />
+                                </div>
+                                <div *ngIf="shouldShowOnSaleBatch && i === selectedProcessIndex" class="bg-[#00E0AC] text-[10px] h-[24px] text-[#222B4E] leading-[16px] rounded-[4px] uppercase font-bold p-1">
+                                    ON SALE</div>
+                              </div>
+                              <div class="flex justify-between items-center">
+                                <h6 class="mb-0 text-[14px] font-bold leading-[20px] text-[#222B4E]">
+                                  {{ process?.short_name }}
+                                </h6>
+                              </div>
+                              <p class="text-[#222B4E] text-[14px] mt-2 leading-[20px]">
+                                {{ process?.description }}
+                              </p>
+                            </div>
+                          </ng-container>
+                        </ng-container>
+
+                        <!-- Single Process Template -->
+                        <ng-template #singleProcess>
+                          <div
+                            [ngClass]="{'active-box': selectedProcessIndex !== -1}"
+                            class="process-col border border-slate-300 p-6 w-full"
+                            (click)="onProcessSelected(processList[selectedProcessIndex !== -1 ? selectedProcessIndex : 0], selectedProcessIndex !== -1 ? selectedProcessIndex : 0)"
+                          >
+                            <!-- Process Content -->
+                            <div class="flex justify-between items-center mb-4">
+                              <div class="w-[48px] h-[48px]">
+                                <img crossorigin="anonymous" class="max-w-12 max-h-12" [src]="getUploadedFile(processList[selectedProcessIndex !== -1 ? selectedProcessIndex : 0]?.image)" alt="" />
+                              </div>
+                              <div *ngIf="shouldShowOnSaleBatch && selectedProcessIndex !== -1" class="bg-[#00E0AC] text-[10px] h-[24px] text-[#222B4E] leading-[16px] rounded-[4px] uppercase font-bold p-1">
+                                ON SALE</div>
+                            </div>
+                            <div class="flex justify-between items-center">
+                              <h6 class="mb-0 text-[14px] font-bold leading-[20px] text-[#222B4E]">
+                                {{ processList[selectedProcessIndex !== -1 ? selectedProcessIndex : 0]?.short_name }}
+                              </h6>
+                            </div>
+                            <p class="text-[#222B4E] text-[14px] mt-2 leading-[20px]">
+                              {{ processList[selectedProcessIndex !== -1 ? selectedProcessIndex : 0]?.description }}
+                            </p>
+
+                            <div class="require_review_container" *ngIf="processList[selectedProcessIndex !== -1 ? selectedProcessIndex : 0]?.require_review || !processList[selectedProcessIndex !== -1 ? selectedProcessIndex : 0]?.instant_quote">
+                                
+                                <div
+                                class="wroning-msg bg-white p-2 border border-[#FFB200] rounded-[4px] inline-block mt-2">
+                                <p class="text-[14px] leading-[20px] text-[#222B4E]">
+                                    <mat-icon
+                                        class="warning-icon min-h-[18px] h-[18px]"
+                                        svgIcon="mat_outline:warning_amber"
+                                    ></mat-icon>
+                                    <span>The selected process will require a review by the team at Formero.</span>
+                                </p>
+                            </div>
+                            </div>
+                          </div>
+                        </ng-template>
+                      </div>
+
+
+
+                    <div class="flex-wrap gap-2 mt-4" *ngIf="processList[selectedProcessIndex !== -1 ? selectedProcessIndex : 0]?.require_review === true">
+                        <mat-form-field class="w-full col-lg-6">
+                            <mat-label class="text-md font-bold">Material
+                                <a class="hover:text-[#00E0AC] content-center ml-60" *ngIf="
+                                        selectedMaterial
+                                            ?.spec_sheet
+                                    " target="_blank" [href]="
+                                        getSpecFile(
+                                            selectedMaterial
+                                                ?.spec_sheet
+                                        )
+                                    " download>
+                                    Spec sheet</a>
+                            </mat-label>
+                            <!-- {{processList[selectedProcessIndex !== -1 ? selectedProcessIndex : 0]?.require_review | json}}pre -->
+                                <mat-select [placeholder]="'Select Material'" [(ngModel)]="selectedMaterial"
+                                    (selectionChange)="onMaterialChange($event.value, $event)">
+                                    <mat-option *ngFor="let material of materialList" [value]="material">
+                                        {{ material?.material_name }}
+                                    </mat-option>
+                                    <mat-option *ngIf="!materialList.length">No material found</mat-option>
+                                </mat-select>
+                    
+                            <!-- </div> -->
+
+                            <mat-error>Material is required!</mat-error>
+                        </mat-form-field>
+
+                        <p class="text-sm font-semibold text-slate-500">
+                            {{ selectedMaterial?.description }}
+                        </p>
+                    </div>
+
+                    <!-- <div *ngIf="selectedMaterial" class="row flex w-full mt-6">
+                        <mat-form-field class="w-full col-6">
+                            <mat-label>Layer thickness (Standard)</mat-label>
+                            <input matInput [value]="
+                                    selectedMaterial?.thickness?.$numberDecimal +
+                                    ' µm'
+                                " [disabled]="true" />
+                        </mat-form-field>
+                    </div>
+
+                    <div *ngIf="selectedMaterial" class="row flex w-full]">
+                        <mat-form-field class="w-full col-6">
+                            <mat-label>Filling (standard triangle fill)</mat-label>
+                            <input matInput [value]="
+                                    selectedMaterial?.filling?.$numberDecimal
+                                " [disabled]="true" />
+                        </mat-form-field>
+                    </div> -->
+
+                    <div class="flex-wrap gap-2 mt-4" *ngIf="processList[selectedProcessIndex !== -1 ? selectedProcessIndex : 0]?.require_review === true;else review_require_finish">
+                        <mat-form-field class="w-full col-lg-6">
+                            <mat-label class="text-md font-bold">Finish</mat-label>
+                            <mat-select [placeholder]="'Select Finish'" [(ngModel)]="selectedFinish"
+                                (selectionChange)="onFinishSelected($event.value)">
+                                <mat-option *ngFor="let finish of finishesList" [value]="finish">
+                                    {{ finish?.finishing_name }}
+                                </mat-option>
+                                <mat-option *ngIf="!finishesList.length">No finishes found</mat-option>
+                            </mat-select>
+                            <mat-error>Finish is required!</mat-error>
+                        </mat-form-field>
+                        <p class="text-sm font-semibold text-slate-500">
+                            {{ selectedFinish?.description }}
+                        </p>
+                    </div>
+
+                    <!-- Finishes -->
+                    <div *ngIf="extrasList.length && processList[selectedProcessIndex !== -1 ? selectedProcessIndex : 0]?.require_review === true" class=" mt-2">
+                        <h6 class="text-[14px] font-bold leading-[20px] mb-4 text-[#222B4E]">
+                            Extras
+                        </h6>
+                        <div class="process-block-col">
+                            <ng-container *ngFor="let extra of extrasList; let i = index">
+                                <div class="process-col border border-slate-300 p-6 w-full">
+                                    <div class="flex">
+                                        <div class="post-check pr-5">
+                                            <mat-checkbox (change)="onExtrasSelected(extra, $event.checked)"
+                                                [checked]="selectedExtras.includes(extra._id)">
+                                            </mat-checkbox>
+                                        </div>
+                                        <div class="post-dtl">
+                                            <div class="post-title">
+                                                <h6 class="mb-0 text-[14px] font-bold leading-[20px] text-[#222B4E]">
+                                                    {{ extra?.name }}
+                                                </h6>
+                                            </div>
+                                            <p class="text-[#222B4E] text-[14px] mt-2 leading-[20px]">
+                                                {{ extra?.description }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+
+           
+
+                    <div class="process-block mt-6">
+                        <h6 class="text-[14px] font-bold leading-[20px] mb-4 text-[#222B4E]">
+                            Quantity
+                        </h6>
+                        <div class="process-block-col">
+                            <input type="number" min="1" max="1000" [(ngModel)]="selectedQuantity"
+                                (ngModelChange)="updateQuantity()"
+                                class="rounded border-opacity-10 border-black border placeholder-black-900 placeholder-opacity-100 h-[52px] w-full pl-[16px] pr[16px] text-[14px] font-bold leading-[20px] mb-4 text-[#222B4E]" />
+                        </div>
+                    </div>
+
+                    <div class="process-block mt-6">
+                        <button type="submit" (click)="save()"
+                            class="rounded h-[52px] w-full bg-white border border-[#00E0AC] text-[14px] font-bold leading-[20px] mb-4 text-[#222B4E]">
+                            {{ isEditingCart ? 'Update model to cart' : 'Add model to cart' }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="!isCustomiseModelShow && isYourOrderShow" class="p-6">
+                <div class="flex items-center justify-between space-x-2 pb-3"
+                    (click)="onExpandOrder(); toggelCustomiseModel()">
+                    <div class="text-xl font-bold underline text-content">
+                        Your cart
+                    </div>
+                    <div class="font-bold underline">
+                        {{ cartItemsInCart.length }}
+                        {{ cartItemsInCart.length > 1 ? "models" : "model" }}
+                        <svg class="w-5 h-5 inline-block transform transition-transform duration-200 cursor-pointer"
+                            [ngClass]="{ 'rotate-180': isYourOrderShow }" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </div>
+                </div>
+                <p class="text-[14px] leading-[20px] mb-6 text-[#222B4E]">
+                    Select a model to modify it.
+                </p>
+                <div class="order-block min-h-90">
+                    <ng-container *ngIf="cartItemsInCart.length > 0">
+                        <ng-container *ngFor="let cartItem of cartItemsInCart">
+                            <!-- TODO update the border color code -->
+
+                            <div class="order-box-col border p-4 w-full rounded-md cursor-pointer"
+                                [ngClass]="{'border-[#00E0AC]': selectedItemId === cartItem.file._id,'bg-[#aaffeb]':selectedItemId === cartItem.file._id}"
+                                (click)="selectModelFromCart(cartItem._id)">
+
+                                <div class="flex justify-between items-center mb-4">
+                                    <!-- <div class="bg-[#D9D9D9] w-[48px] h-[48px]"></div> -->
+                                    <img class="w-[48px] h-[48px]" [src]="cartItem?.file?.thumbnail" alt="">
+                                    <button (click)="
+                                            removeModelFromCart(cartItem._id)
+                                        ">
+                                        <mat-icon class="mr-2 delete-icon" svgIcon="mat_outline:delete"></mat-icon>
+                                    </button>
+                                </div>
+                                <div class="flex justify-between mb-2">
+                                    <span
+                                        class="text-[14px] leading-[20px] font-bold text-[#222B4E] w-[40%] overflow-ellipsis overflow-hidden whitespace-nowrap">{{
+                                        cartItem?.file?.name }}</span>
+                                    <span class="text-[14px] leading-[20px] text-[#222B4E]">Qty {{ cartItem?.quantity
+                                        }}.</span>
+                                    <span class="text-[14px] leading-[20px] text-[#222B4E]">{{ cartItem?.price |
+                                        currency
+                                        }}</span>
+                                </div>
+                                <!-- <div class="flex justify-between mb-2">
+                                    <span class="text-[14px] leading-[20px] text-[#222B4E]">{{
+                                        cartItem.price / cartItem.quantity
+                                        | currency
+                                        }}
+                                        per part</span>
+                                </div> -->
+                                <div class="require_review_container" *ngIf="cartItem?.require_review || !cartItem?.instant_quote">
+                                    <div
+                                    class="wroning-msg bg-white rounded-[4px] inline-block mt-2">
+                                    <p class="text-[14px] leading-[20px] text-[#222B4E]">
+                                        <mat-icon
+                                            class="warning-icon min-h-[18px] h-[18px]"
+                                            svgIcon="mat_outline:warning_amber"
+                                        ></mat-icon>
+                                        <span>The selected process will require a review by the team at Formero.</span>
+                                    </p>
+                                </div>
+                                </div>
+                            </div>
+                    
+                        </ng-container>
+                    </ng-container>
+
+                    <ng-container *ngIf="cartItemsInCart.length == 0">
+                        <div class="min-h-90 flex justify-center items-center">
+                            <div class="text-xl block">
+                                <p class="flex justify-center">
+                                    <mat-icon class="icon-size-16 text-[#222B4E]" svgIcon="feather:box"></mat-icon>
+                                </p>
+                                <p class="mt-4">your cart is empty</p>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+            <div class="absolute bg-white bottom-0 shadow-t-md drop-shadow-md p-6 w-full">
+                <div *ngIf="!isYourOrderShow" class="flex items-center justify-between space-x-2 pb-3"
+                    (click)="onExpandOrder(); toggelCustomiseModel()">
+                    <div class="text-xl font-bold underline text-content">
+                        Your cart
+                    </div>
+                    <div class="font-bold underline">
+                        {{ cartItemsInCart.length }}
+                        {{ cartItemsInCart.length > 1 ? "models" : "model" }}
+                        <svg class="w-5 h-5 inline-block transform transition-transform duration-200 cursor-pointer"
+                            [ngClass]="{ 'rotate-180': isYourOrderShow }" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </div>
+                </div>
+
+                <div *ngIf="isYourOrderShow" class="order-box-col w-full">
+                    <div class="flex justify-between mb-2">
+                        <span class="text-[14px] leading-[20px] font-bold text-[#222B4E]">Subtotal</span>
+                        <span class="text-[14px] leading-[20px] text-[#222B4E]">{{ cartSubTotal | currency }}</span>
+                    </div>
+                    <div class="flex justify-between mb-2">
+                        <span class="text-[14px] leading-[20px] font-bold text-[#222B4E]">GST <span
+                                class="font-normal">(10%)</span></span>
+                        <span class="text-[14px] leading-[20px] text-[#222B4E]">{{ cartGstCost | currency }}</span>
+                    </div>
+                    <div class="flex justify-between mb-2">
+                        <span class="text-[14px] leading-[20px] font-bold text-[#222B4E]">Total</span>
+                        <span class="text-[14px] leading-[20px] font-bold text-[#222B4E]">{{ cartTotatCost | currency
+                            }}</span>
+                    </div>
+                    <div class="w-full mb-4">
+                        <p>Delivery fees calculated during order details</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button [disabled]="!isCartHaveModelAdded" [ngClass]="{
+                        'bg-gray-100': !isCartHaveModelAdded,
+                        'bg-[#00E0AC]': isCartHaveModelAdded,
+                    }" (click)="completeForm()"
+                        class="w-3/4 h-[52px] text-[1em] font-bold leading-[1.3em] text-[#222B4E] rounded-md">
+                        Proceed to additional details
+                    </button>
+
+                    <button (click)="onSaveAndExit()"
+                        class="border border-[#00E0AC] h-[52px] text-[1em] font-bold leading-[1.3em] text-[#222B4E] w-1/4 rounded-md">
+                        Save & exit
+                    </button>
+
+                    <!-- <div class="require_review_container" *ngIf="!processList[selectedProcessIndex !== -1 ? selectedProcessIndex : 0]?.instant_quote">
+                        <div
+                        class="wroning-msg bg-white p-2 border border-[#FFB200] rounded-[4px] inline-block mt-2">
+                        <p class="text-[14px] leading-[20px] text-[#222B4E]">
+                            <mat-icon
+                                class="warning-icon min-h-[18px] h-[18px]"
+                                svgIcon="mat_outline:warning_amber"
+                            ></mat-icon>
+                            <span>An instant quote/order will not be possible as your cart contains models that require a review.</span>
+                        </p>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
