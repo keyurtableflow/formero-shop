@@ -31,6 +31,7 @@ export class ModernLayoutComponent implements OnInit, OnDestroy
     isScreenSmall: boolean;
     navigation: Navigation;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
+    isAppHeaderShow:boolean = false;
 
     /**
      * Constructor
@@ -43,6 +44,9 @@ export class ModernLayoutComponent implements OnInit, OnDestroy
         private _fuseNavigationService: FuseNavigationService,
     )
     {
+        this._router.events.subscribe(() => {
+            this.isAppHeaderShow = this._router.url != '/my-account';
+          });
     }
 
     // -----------------------------------------------------------------------------------------------------

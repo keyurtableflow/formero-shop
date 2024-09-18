@@ -99,11 +99,25 @@
                                                                         <div class="text-lg font-bold">
                                                                             {{model?.model_name}}</div>
                                                                         <div class="text-md underline mt-2 flex items-center"
-                                                                            *ngIf="model?.modelWallThickness">
+                                                                            *ngIf="model?.require_review ||  !model?.instant_quote">
                                                                             <mat-icon
                                                                                 class="icon-size-5 text-yellow-400 mr-1"
                                                                                 [svgIcon]="'mat_solid:warning_amber'"></mat-icon>
-                                                                            Model wall thickness too thin
+                                                                                The selected process will require a review by the team at Formero.
+                                                                        </div>
+                                                                        <div class="text-md underline mt-2 flex items-center"
+                                                                            *ngIf="model?.is_metrics_error">
+                                                                            <mat-icon
+                                                                                class="icon-size-5 text-yellow-400 mr-1"
+                                                                                [svgIcon]="'mat_solid:warning_amber'"></mat-icon>
+                                                                                The model metrics can't be determined.
+                                                                        </div>
+                                                                        <div class="text-md underline mt-2 flex items-center"
+                                                                            *ngIf="!model?.model_is_fit">
+                                                                            <mat-icon
+                                                                                class="icon-size-5 text-yellow-400 mr-1"
+                                                                                [svgIcon]="'mat_solid:warning_amber'"></mat-icon>
+                                                                                The model can't fit into printer due to bigger size.
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -111,17 +125,17 @@
                                                             <td class="p-4 " valign="top">
                                                                 <ul>
                                                                     <li>Process:</li>
-                                                                    <li>Material: </li>
-                                                                    <li>Finish:</li>
-                                                                    <li>Extras:</li>
+                                                                    <li *ngIf="!model?.require_review ">Material: </li>
+                                                                    <li *ngIf="!model?.require_review ">Finish:</li>
+                                                                    <li *ngIf="!model?.require_review ">Extras:</li>
                                                                 </ul>
                                                             </td>
                                                             <td class="p-4" valign="top">
                                                                 <ul>
                                                                     <li>{{model?.processData?.process_name || '-'}}</li>
-                                                                    <li>{{model?.materialData.material_name || "-"}}
+                                                                    <li *ngIf="!model?.require_review ">{{model?.materialData.material_name || "-"}}
                                                                     </li>
-                                                                    <ul>
+                                                                    <ul *ngIf="!model?.require_review ">
                                                                         <ng-container *ngFor="
                                                                                 let item of model.finishesData
                                                                             ">
@@ -132,7 +146,7 @@
                                                                             </li>
                                                                         </ng-container>
                                                                     </ul>
-                                                                    <ul>
+                                                                    <ul *ngIf="!model?.require_review ">
                                                                         <ng-container *ngFor="
                                                                                 let item of model.extrasData
                                                                             ">
@@ -155,9 +169,7 @@
                                                                 </div>
                                                             </td>
                                                             <td  class="p-4" valign="top">
-                                                                <span *ngIf="isQuotable" class="text-md font-bold">{{model.price |
-                                                                    currency}}</span>
-                                                                    <span *ngIf="!isQuotable" class="text-md font-bold">TBD</span>
+                                                                <span class="text-md font-bold">{{!isProcessInstantQuote || model?.is_metrics_error || !model?.model_is_fit ? "TBD" : model.price | currency}}</span>
                                                             </td>
                                                         </tr>
                                                         <!-- <tr
@@ -428,10 +440,14 @@
                         </div>
 
                         <div class="mt-6">
-                            <p>
+                            <p *ngIf="isOrderValueMatch">
                                 Your quote is unavailable while the order is under review.
                             </p>
+                            <p *ngIf="!isOrderValueMatch" class="mt-2">
+                                Your order doesn't meet the minimum order value and will require a review.
+                            </p>
                         </div>
+
                     </div>
                 </div>
 
@@ -443,11 +459,14 @@
 
                         <p>Your order is currently being reviewed and a quote is being prepared. We will contact you shortly.</p>
                         <hr class="mb-2">
-                        <div class="mt-6">
+                        <div *ngIf="!isProcessInstantQuote" class="mt-6">
                             <p>
-                                Your quote is unavailable while the order is under review.
+                                An instant quote is not possible as your cart contains models or processes that require a review.
                             </p>
                         </div>
+                        <P *ngIf="!isOrderValueMatch" class="mt-2">
+                            Your order doesn't meet the minimum order value and will require a review.
+                        </P>
                     </div>
                 </div>
             </div>

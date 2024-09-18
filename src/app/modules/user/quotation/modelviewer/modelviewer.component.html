@@ -1,63 +1,48 @@
 <div class="relative w-full h-full">
     <div class="w-full grid grid-cols-12 gap-5 absolute">
         <div class="col-span-12 lg:col-span-4 xl:col-span-4">
-            <p
-                *ngIf="
+            <p *ngIf="
                     volumeData?.coordinates?.x &&
                     volumeData?.coordinates?.y &&
                     volumeData?.coordinates?.z
-                "
-                class="text-[14px] leading-[20px]"
-                [ngClass]="
+                " class="text-[14px] leading-[20px]" [ngClass]="
                     selectedColorMode == 'light'
                         ? 'text-[#222B4E]'
                         : 'text-white'
-                "
-            >
+                ">
                 <span class="font-bold">Size:</span>
                 {{ volumeData?.coordinates?.x.toFixed(2) }} x
                 {{ volumeData?.coordinates?.y.toFixed(2) }} x
                 {{ volumeData?.coordinates?.z.toFixed(2) }} mm
             </p>
-            <p
-                *ngIf="volumeData?.volume"
-                class="text-[14px] leading-[20px]"
-                [ngClass]="
+            <p *ngIf="volumeData?.volume" class="text-[14px] leading-[20px]" [ngClass]="
                     selectedColorMode == 'light'
                         ? 'text-[#222B4E]'
                         : 'text-white'
-                "
-            >
+                ">
                 <span class="font-bold">Volume</span>
                 {{ volumeData?.volume.toFixed(2) | number }} mm<sup>3</sup>
             </p>
 
-            <p
-                *ngIf="volumeData?.surfaceArea"
-                class="text-[14px] leading-[20px]"
-                [ngClass]="
+            <p *ngIf="volumeData?.surfaceArea" class="text-[14px] leading-[20px]" [ngClass]="
                     selectedColorMode == 'light'
                         ? 'text-[#222B4E]'
                         : 'text-white'
-                "
-            >
+                ">
                 <span class="font-bold">Surface area</span>
                 {{ volumeData?.surfaceArea.toFixed(2) | number }} mm<sup>2</sup>
             </p>
-           
+
         </div>
         <div class="col-span-12 lg:col-span-6 xl:col-span-6 text-center">
-            <h4
-                class="text-[20px] leading-[32px] font-bold"
-                [ngClass]="
+            <h4 class="text-[20px] leading-[32px] font-bold" [ngClass]="
                     selectedColorMode == 'light'
                         ? 'text-[#222B4E]'
                         : 'text-white'
-                "
-            >
+                ">
                 {{ files?.name }}
             </h4>
-            <div *ngIf="review_require"
+            <!-- <div
                 class="wroning-msg bg-white p-2 border border-[#FFB200] rounded-[4px] inline-block mt-2"
             >
                 <p class="text-[14px] leading-[20px] text-[#222B4E]">
@@ -65,53 +50,45 @@
                         class="warning-icon min-h-[18px] h-[18px]"
                         svgIcon="mat_outline:warning_amber"
                     ></mat-icon>
-                    <span>The model metrics can't be determined.</span>
-                    <!-- <ng-template #commanMessage>
                     Model wall thickness too thin (less than 1.0
                     cm<sup>3</sup>).<span class="font-bold ml-2"
                         >Learn more</span
-                        >
-                    </ng-template> -->
+                    >
+                </p>
+            </div> -->
+
+            <div *ngIf="errors?.isMetricError"
+                class="wroning-msg bg-white p-2 border border-[#FFB200] rounded-[4px] inline-block mt-2">
+                <p class="text-[14px] leading-[20px] text-[#222B4E]">
+                    <mat-icon class="warning-icon min-h-[18px] h-[18px]" svgIcon="mat_outline:warning_amber"></mat-icon>
+                    The model metrics can't be determined
                 </p>
             </div>
-            <!-- <div *ngIf="review_require"
+
+            <div *ngIf="!errors?.model_is_fit"
             class="wroning-msg bg-white p-2 border border-[#FFB200] rounded-[4px] inline-block mt-2">
-            <p class="text-[14px] leading-[20px] text-[#222B4E] print-container">
-                <mat-icon
-                    class="warning-icon min-h-[18px] h-[18px]"
-                    svgIcon="mat_outline:warning_amber"
-                ></mat-icon>
-                <span>The model metrics can't be determined.</span>
+            <p class="text-[14px] leading-[20px] text-[#222B4E]">
+                <mat-icon class="warning-icon min-h-[18px] h-[18px]" svgIcon="mat_outline:warning_amber"></mat-icon>
+                The model can't fit into printer due to bigger size.
             </p>
-        </div> -->
+        </div>
+
+
         </div>
         <div class="col-span-12 lg:col-span-2 xl:col-span-2">
-            <p
-                (click)="onViewChange()"
-                class="text-[14px] leading-[20px] text-[#222B4E] font-bold p-4 bg-white inline-block float-right cursor-pointer"
-            >
+            <p (click)="onViewChange()"
+                class="text-[14px] leading-[20px] text-[#222B4E] font-bold p-4 bg-white inline-block float-right cursor-pointer">
                 View
-                <mat-icon
-                    class="view-arrow text-[#222B4E]"
-                    svgIcon="mat_outline:keyboard_arrow_down"
-                ></mat-icon>
+                <mat-icon class="view-arrow text-[#222B4E]" svgIcon="mat_outline:keyboard_arrow_down"></mat-icon>
             </p>
-            <div
-                *ngIf="isView"
-                class="view-box-dtl bg-white p-6 absolute lg:top-[57%] xl:top-[70%] right-0"
-            >
+            <div *ngIf="isView" class="view-box-dtl bg-white p-6 absolute lg:top-[57%] xl:top-[70%] right-0">
                 <div class="grid grid-cols-12 gap-5">
                     <div class="col-span-12 lg:col-span-4 xl:col-span-4">
-                        <h6
-                            class="text-[14px] leading-[20px] pb-6 text-[#222B4E] font-bold"
-                        >
+                        <h6 class="text-[14px] leading-[20px] pb-6 text-[#222B4E] font-bold">
                             Shading
                         </h6>
-                        <mat-radio-group
-                            class="w-full"
-                            [(ngModel)]="selectedOption"
-                            (change)="onSelectionChange($event)"
-                        >
+                        <mat-radio-group class="w-full" [(ngModel)]="selectedOption"
+                            (change)="onSelectionChange($event)">
                             <div class="flex justify-between items-center">
                                 <mat-radio-button [value]="'solid'">
                                     <p>Solid</p>
@@ -130,85 +107,45 @@
                         </mat-radio-group>
                     </div>
                     <div class="col-span-12 lg:col-span-4 xl:col-span-4">
-                        <h6
-                            class="text-[14px] leading-[20px] pb-6 text-[#222B4E] font-bold"
-                        >
+                        <h6 class="text-[14px] leading-[20px] pb-6 text-[#222B4E] font-bold">
                             Grids & guides
                         </h6>
                         <ul>
-                            <li
-                                class="text-[14px] leading-[20px] pb-4 text-[#222B4E]"
-                            >
-                                <mat-checkbox
-                                    class="mr-4"
-                                    [(ngModel)]="is3DAxesChecked"
-                                    (change)="onGuideSelectionChange('3dAxes')"
-                                    >3D axis</mat-checkbox
-                                >
+                            <li class="text-[14px] leading-[20px] pb-4 text-[#222B4E]">
+                                <mat-checkbox class="mr-4" [(ngModel)]="is3DAxesChecked"
+                                    (change)="onGuideSelectionChange('3dAxes')">3D axis</mat-checkbox>
                             </li>
-                            <li
-                                class="text-[14px] leading-[20px] pb-4 text-[#222B4E]"
-                            >
-                                <mat-checkbox
-                                    class="mr-4"
-                                    [(ngModel)]="isFloorPlaneChecked"
-                                    (change)="
+                            <li class="text-[14px] leading-[20px] pb-4 text-[#222B4E]">
+                                <mat-checkbox class="mr-4" [(ngModel)]="isFloorPlaneChecked" (change)="
                                         onGuideSelectionChange('floorPlane')
-                                    "
-                                    >Floor plane</mat-checkbox
-                                >
+                                    ">Floor plane</mat-checkbox>
                             </li>
-                            <li
-                                class="text-[14px] leading-[20px] pb-4 text-[#222B4E]"
-                            >
-                                <mat-checkbox
-                                    class="mr-4"
-                                    [(ngModel)]="isModelBoxChecked"
-                                    (change)="
+                            <li class="text-[14px] leading-[20px] pb-4 text-[#222B4E]">
+                                <mat-checkbox class="mr-4" [(ngModel)]="isModelBoxChecked" (change)="
                                         onGuideSelectionChange('modelBox')
-                                    "
-                                    >Model box</mat-checkbox
-                                >
+                                    ">Model box</mat-checkbox>
                             </li>
-                            <li
-                                class="text-[14px] leading-[20px] pb-4 text-[#222B4E]"
-                            >
-                                <mat-checkbox
-                                    class="mr-4"
-                                    [(ngModel)]="isPrinterBoxChecked"
-                                    (change)="
+                            <li class="text-[14px] leading-[20px] pb-4 text-[#222B4E]">
+                                <mat-checkbox class="mr-4" [(ngModel)]="isPrinterBoxChecked" (change)="
                                         onGuideSelectionChange('printerBox')
-                                    "
-                                    >Printer box</mat-checkbox
-                                >
+                                    ">Printer box</mat-checkbox>
                             </li>
                         </ul>
                     </div>
                     <div class="col-span-12 lg:col-span-4 xl:col-span-4">
-                        <h6
-                            class="text-[14px] leading-[20px] pb-6 text-[#222B4E] font-bold"
-                        >
+                        <h6 class="text-[14px] leading-[20px] pb-6 text-[#222B4E] font-bold">
                             Appearance
                         </h6>
                         <div>
-                            <mat-radio-group
-                                class="w-full"
-                                [(ngModel)]="selectedColorMode"
-                                (change)="onColorModeChange($event)"
-                            >
+                            <mat-radio-group class="w-full" [(ngModel)]="selectedColorMode"
+                                (change)="onColorModeChange($event)">
                                 <div class="flex justify-between items-center">
-                                    <mat-radio-button
-                                        class="mr-4"
-                                        [value]="'light'"
-                                    >
+                                    <mat-radio-button class="mr-4" [value]="'light'">
                                         Light
                                     </mat-radio-button>
                                 </div>
                                 <div class="flex justify-between items-center">
-                                    <mat-radio-button
-                                        class="mr-4"
-                                        [value]="'dark'"
-                                    >
+                                    <mat-radio-button class="mr-4" [value]="'dark'">
                                         Dark
                                     </mat-radio-button>
                                 </div>
@@ -220,12 +157,7 @@
         </div>
     </div>
 
-    <canvas
-        [hidden]="isRenderMode"
-        id="myCanvas"
-        #canvas
-        class="w-full h-full"
-    ></canvas>
+    <canvas [hidden]="isRenderMode" id="myCanvas" #canvas class="w-full h-full"></canvas>
     <canvas #thumbnailCanvas style="display: none"></canvas>
 
     <div *ngIf="isRenderMode" class="w-full h-full flex justify-center">

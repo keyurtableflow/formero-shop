@@ -57,6 +57,9 @@ export class ConfirmationComponent {
     selectedFiles: File[] = [];
     isNewProject:boolean = false;
     isQuotable:boolean = true;
+    isProcessInstantQuote:boolean = true;
+    isOrderValueMatch:boolean = true;
+
 
 
     constructor(private router: Router, private stepService: StepService,private _quotationService: QuotationService,
@@ -131,15 +134,35 @@ export class ConfirmationComponent {
             }
           }
 
-          console.log( res.data.result," res.data.resultmn");
+          const materialTotals: { [key: string]: number } = {};
+
+            this.models.forEach((model) => {
+                const totalPrice = model.price;
+
+                if (!materialTotals[model.materialId]) {
+                    materialTotals[model.materialId] = 0;
+                }
+                materialTotals[model.materialId] += totalPrice;
+            });
+
+            this.models.forEach((model) => {
+                if (materialTotals[model.materialId] < model.order_value) {
+                    this.isOrderValueMatch = false;
+                } else {
+                    this.isOrderValueMatch = true;
+                }
+            });
+
+          this.isProcessInstantQuote = !this.models.some(model => model.instant_quote === false);
+
 
           this.documents = _.cloneDeep(res.data.result.documents) || [];
           this.notes = res.data.result.notes || '';
 
           if(res.data.result.project_id){
             this.projectForm.get('project_id').setValue(res.data.result.project_id);
-            this.projectForm.disable();
           }
+          this.projectForm.disable();
 
           if (!this.models.length) {
             this._commonService.openErrorSnackBar("Please add items to cart")

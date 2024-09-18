@@ -134,10 +134,6 @@ app-header {
     max-height: calc(100vh - 550px);
     overflow-y: auto;
 }
-.right-col {
-        max-height: calc(100vh - 400px);
-        overflow-y: auto;
-}
 .process-col {
     &.active-box {
         background-color: rgba(0, 224, 172, 0.05);

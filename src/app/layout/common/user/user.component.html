@@ -10,7 +10,7 @@
     ></mat-icon>
     </span>
     <mat-menu [xPosition]="'before'" #userActions="matMenu">
-        <button mat-menu-item>
+        <button mat-menu-item (click)="onAccount()">
             <mat-icon [svgIcon]="'heroicons_outline:user-circle'"></mat-icon>
             <span>Profile</span>
         </button>

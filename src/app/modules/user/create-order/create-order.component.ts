@@ -99,6 +99,8 @@ export class CreateOrderComponent implements OnInit {
     // Volumedata
     volumeData: VolumeData;
 
+    errors:{isMetricError:boolean,model_is_fit:boolean} = {isMetricError:false,model_is_fit:true};
+
     constructor(private stepService: StepService, private route: ActivatedRoute,
         private _quotationService: QuotationService, private _router: Router, private _fuseConfirmationService: FuseConfirmationService,
         private _fileManagementService: FileManagementService, private sanitizer: DomSanitizer, private _commonService: CommonService
@@ -120,6 +122,39 @@ export class CreateOrderComponent implements OnInit {
         return +(this.printingCost / this.selectedQuantity).toFixed(2);
     }
 
+    get getSelectedItem(){
+       return this.cartItems.find(item => item.file._id === this.selectedItemId);
+    }
+
+    get cartItemsInCart(): CartItem[] {
+        return this.cartItems.filter(item => item.is_cart);
+    }
+
+    get isAnyModelNotInstantQuote() : boolean{
+        let val = false;
+        this.cartItemsInCart.map((res)=> res.instant_quote == false ? val = true : val = false);
+        return val
+    }
+
+    get isAnyModelNotFitOrHasMetricsError(): boolean {
+        return this.cartItemsInCart.some(item => !item.model_is_fit || item.is_metrics_error);
+    }
+    get isAnyModelOrderValueMismatch(): boolean {
+        const materialTotals: { [key: string]: number } = {};
+
+        this.cartItemsInCart.forEach(item => {
+            const totalPrice = item.quantity * item.price;
+
+            if (!materialTotals[item.materialId]) {
+                materialTotals[item.materialId] = 0;
+            }
+            materialTotals[item.materialId] += totalPrice;
+        });
+
+        return this.cartItemsInCart.some(item =>
+            materialTotals[item.materialId] < item.order_value
+        );
+    }
 
     ngOnInit(): void {
         this.quotationId = this._quotationService.getQuotationId();
@@ -190,7 +225,6 @@ export class CreateOrderComponent implements OnInit {
                     this._commonService.openErrorSnackBar("Your quote is in review. you can not changed any details.")
                 }
                 this.filesList = res.data.result.items.reduce((acc, item) => {
-                    console.log(res,"res test")
                     if (!item.is_cart) {
                         acc.push({
                             url: this.get3dFile(item.model),
@@ -231,6 +265,8 @@ export class CreateOrderComponent implements OnInit {
                     };
                 });
                 this.isCartHaveModelAdded = this.cartItems.some(item => item.is_cart);
+
+                console.log(this.cartItems,"cartItems")
 
                 if (this.filesList.length) {
                     this.onFileSelected(this.filesList[0], isCartPanelOpen);
@@ -297,49 +333,74 @@ export class CreateOrderComponent implements OnInit {
                  this.totalDiscount = 0; // Initialize total discount to 0
                 const currentDate = new Date();
 
-                // Iterate through all promotions and apply the applicable discounts
-                for (const promotion of selectedProcess.promotionsData) {
-                    const { method, dollar, percentage } = promotion.discount;
+                const material = this.materialList.find(mat => mat._id === selectedItem.materialId);
+            if (material) {
+                const maxHeight = Number(material.height.$numberDecimal);
+                const maxWidth = Number(material.width.$numberDecimal);
+                const maxLength = Number(material.length.$numberDecimal);
 
-                    // Extract start and end dates for the promotion
-                    const startDate = promotion.limit.start_date ? new Date(promotion.limit.start_date) : null;
-                    const endDate = promotion.limit.end_date ? new Date(promotion.limit.end_date) : null;
+                const modelHeight = this.volumeData?.coordinates.z;
+                const modelWidth = this.volumeData?.coordinates.y;
+                const modelLength = this.volumeData?.coordinates.x;
 
-                    // Check if promotion is active and within the date range
-                    if (
-                      promotion.is_active && promotion.used_count < promotion.limit.usage &&
-                      (
-                        // Case 1: Both start and end dates are provided
-                        (startDate && endDate && startDate <= currentDate && endDate >= currentDate) ||
-                        // Case 2: Only start date is provided
-                        (startDate && !endDate && startDate <= currentDate) ||
-                        // Case 3: Only end date is provided
-                        (!startDate && endDate && endDate >= currentDate) ||
-                        // Case 4: No start or end dates are provided
-                        (!startDate && !endDate)
-                      ) &&
-                      promotion?.qualifiers?.processes.some(p => p.processId === selectedProcess._id) &&
-                      (!promotion.qualifiers.code || promotion.qualifiers.code.trim() === '')
-                    ) {
-                      // Apply the discount based on the promotion method
-                      if (method === 1) {
-                        // Method 1: Fixed dollar discount
-                        this.totalDiscount += dollar;
-                      } else if (method === 2) {
-                        // Method 2: Percentage discount
-                        this.totalDiscount += (processCost * (percentage / 100));
+                selectedItem.model_is_fit = (maxHeight >modelHeight  && maxWidth > modelWidth  &&  maxLength > modelLength );
+                this.errors.model_is_fit = selectedItem.model_is_fit;
+            } else {
+                selectedItem.model_is_fit = true;
+                this.errors.model_is_fit = true;
+            }
+
+            // Check for metrics errors (0 or negative values)
+                selectedItem.is_metrics_error = this.volumeData?.coordinates?.z <= 0 && this.volumeData?.coordinates?.y <= 0 && this.volumeData?.coordinates?.x <= 0 && this.volumeData.surfaceArea <= 0 && this.volumeData.volume <= 0;
+                selectedItem.is_metrics_error ? this.errors.isMetricError = true : this.errors.isMetricError = false;
+
+
+                if(selectedProcess?.promotionsData){
+                    for (const promotion of selectedProcess?.promotionsData) {
+                        const { method, dollar, percentage } = promotion.discount;
+
+                        // Extract start and end dates for the promotion
+                        const startDate = promotion.limit.start_date ? new Date(promotion.limit.start_date) : null;
+                        const endDate = promotion.limit.end_date ? new Date(promotion.limit.end_date) : null;
+
+                        // Check if promotion is active and within the date range
+                        if (
+                          promotion.is_active && promotion.used_count < promotion.limit.usage &&
+                          (
+                            // Case 1: Both start and end dates are provided
+                            (startDate && endDate && startDate <= currentDate && endDate >= currentDate) ||
+                            // Case 2: Only start date is provided
+                            (startDate && !endDate && startDate <= currentDate) ||
+                            // Case 3: Only end date is provided
+                            (!startDate && endDate && endDate >= currentDate) ||
+                            // Case 4: No start or end dates are provided
+                            (!startDate && !endDate)
+                          ) &&
+                          promotion?.qualifiers?.processes.some(p => p.processId === selectedProcess._id) &&
+                          (!promotion.qualifiers.code || promotion.qualifiers.code.trim() === '')
+                        ) {
+                          // Apply the discount based on the promotion method
+                          if (method === 1) {
+                            // Method 1: Fixed dollar discount
+                            this.totalDiscount += dollar;
+                          } else if (method === 2) {
+                            // Method 2: Percentage discount
+                            this.totalDiscount += (processCost * (percentage / 100));
+                          }
+
+                          if (this.totalDiscount > 0 && promotion.qualifiers.show_cta) {
+                            this.shouldShowOnSaleBatch = true;
+                          }
+
+                        }
                       }
-
-                      if (this.totalDiscount > 0 && promotion.qualifiers.show_cta) {
-                        this.shouldShowOnSaleBatch = true;
-                      }
-
-                    }
-                  }
+                }
                 selectedItem.applied_proccess_dicount = this.totalDiscount;
                 // Apply total discount to process cost
                 processCost = Math.max(0, processCost - this.totalDiscount);
-                this.printingCost = processCost * selectedItem.quantity; // Calculate printing cost only from process
+                // this.printingCost = processCost * selectedItem.quantity; // Calculate printing cost only from process
+
+                this.printingCost = processCost;
                 // Calculate startup fee and extras cost
                 this.startupFee = this.calculateStartupFee(selectedItem.materialId, selectedItem.quantity);
                 this.extrasCost = this.calculateExtrasCost(selectedItem.extras_ids, selectedItem.quantity);
@@ -383,7 +444,6 @@ export class CreateOrderComponent implements OnInit {
     // --------------------------------------------File Upload Logic start--------------------------------------------------
 
     onFileChange(event: any) {
-        debugger
         if (this.filesList.length + event?.target?.files.length > 20) {
             this.showError({ error: { message: "Cannot add more than 20 items to the rail." } });
             return;
@@ -671,7 +731,7 @@ export class CreateOrderComponent implements OnInit {
     getMaterialBasedOnProcess(id: string, forCart?: any, updateCostCalulate?: boolean) {
         this.shouldShowOnSaleBatch = false;
         this._quotationService.getMaterialFromProcessId(id).subscribe((result) => {
-            console.log("getMaterialBasedOnProcess",result)
+            // console.log("getMaterialBasedOnProcess",result)
             if (result.statusCode === 200) {
                 this.materialList = result?.data.result.materialsData;
 
@@ -717,6 +777,8 @@ export class CreateOrderComponent implements OnInit {
                     this.startupFee = this.calculateStartupFee(this.selectedMaterial, this.selectedQuantity);
                     this.updateCosts();
                 }
+
+                console.log(this.materialList,"material")
             }
 
         }, (error: any) => {
@@ -773,7 +835,7 @@ export class CreateOrderComponent implements OnInit {
     }
 
     onProcessSelected(process: any, index: number): void {
-        debugger
+        console.log(process,"sds")
         if (!this.selectedItemId) {
             return this._commonService.openErrorSnackBar("Please select the file to customise");
         }
@@ -795,21 +857,14 @@ export class CreateOrderComponent implements OnInit {
             this.toggleProcessListSize();
             // this.updateCosts();
         }
-        console.log("instant_quote",selectedItem)
 
     }
 
-    get requireReview(): boolean {
-        // console.log("xxxxxxxxxxxxxxxprocessList",this.processList)
-        debugger
-        const selectedProcess = this.processList[this.selectedProcessIndex !== -1 ? this.selectedProcessIndex : 0];
-        return selectedProcess?.require_review || false;
-      }
-
-      
     async getProcessPrice(processId: string): Promise<number> {
         return new Promise((resolve) => {
             const process = this.processList.find(p => p._id === processId);
+
+            console.log(this.materialList.find((res=> res._id == this.selectedMaterial?._id)),"s")
             let url = '';
             if (process) {
                 url += `?equation_mapped_id=${process.pricingModelsData._id}&material_id=${this.selectedMaterial?._id}&finishes_id=${this.selectedFinish?._id}&process_id=${processId}`
@@ -921,9 +976,7 @@ export class CreateOrderComponent implements OnInit {
     }
 
 
-    get cartItemsInCart(): CartItem[] {
-        return this.cartItems.filter(item => item.is_cart);
-    }
+
 
     getSpecFile(filePath: any) {
         const serverFileName = filePath.split('/').pop();
@@ -942,7 +995,6 @@ export class CreateOrderComponent implements OnInit {
 
     ensureCartItemExists(): void {
         const selectedItem = this.cartItems.find(item => item.file._id === this.selectedItemId);
-        console.log("this.cartItems",this.cartItems)
         if (!selectedItem) {
             this.cartItems.push({
                 file: this.filesList.find(file => file._id === this.selectedItemId),
@@ -962,7 +1014,9 @@ export class CreateOrderComponent implements OnInit {
                 require_review:false,
                 order_value:0,
                 applied_proccess_dicount:0,
-                thumbnail:''
+                thumbnail:'',
+                model_is_fit:false,
+                is_metrics_error:false
             });
         }
     }
@@ -1071,6 +1125,9 @@ export class CreateOrderComponent implements OnInit {
                 selectedItem.surface_area = String(this.volumeData.surfaceArea);
                 selectedItem.errors = this.convertErrorsToFormat(this.volumeData.errors);
 
+
+                console.log(selectedItem,"selected")
+
                 const updateData = this.cartItems.map((element) => {
                     const { file, processId, materialId, extras_ids, finishes_ids, ...otherDetails } = element;
 
@@ -1088,6 +1145,8 @@ export class CreateOrderComponent implements OnInit {
                         finishes_ids: formattedFinishes
                     };
                 });
+
+                console.log(updateData,"updateData")
 
                 if (updateData.length > 0) {
                     this._quotationService.updateQuotation(this.quotationId, { items: updateData }).subscribe((res) => {
@@ -1111,7 +1170,6 @@ export class CreateOrderComponent implements OnInit {
     }
 
     onSaveAndExit() {
-        debugger
         this.stepService.setStepCompleted(1, true);
         const amountDetails = {
             "subtotal": this.cartSubTotal,
@@ -1121,7 +1179,6 @@ export class CreateOrderComponent implements OnInit {
             "currency": "USD",
         }
         console.log(this.cartTotatCost,"this.quotationId", QuotationStatus.SaveAndExitCart,"this.quotationId", amountDetails);
-        return
         this._quotationService.updateQuotation(this.quotationId, { amount_details: amountDetails, total_amount: this.cartTotatCost, quotation_status: QuotationStatus.SaveAndExitCart, }).subscribe((res) => {
             this._commonService.openSnackBar("Cart details saved successfully")
             this.stepService.resetSteps();
@@ -1146,6 +1203,7 @@ export class CreateOrderComponent implements OnInit {
 
     updateXYXPosition(event: VolumeData) {
         this.volumeData = event;
+        this.updateCosts();
     }
 
     convertErrorsToFormat = (errors: string[]) => {
@@ -1155,6 +1213,19 @@ export class CreateOrderComponent implements OnInit {
     toggleProcessListSize(){
         this.showAllProcess = !this.showAllProcess;
         // processBlock.scrollTop = 0;
+    }
+
+    getMaxHeight(): string {
+        const hasInstantQuoteIssue = this.isAnyModelNotInstantQuote;
+        const hasOrderValueMismatch = this.isAnyModelOrderValueMismatch;
+
+        if (hasInstantQuoteIssue && hasOrderValueMismatch) {
+            return 'calc(100vh - 480px)';
+        } else if (hasInstantQuoteIssue || hasOrderValueMismatch) {
+            return 'calc(100vh - 430px)';
+        } else {
+            return 'calc(100vh - 400px)';
+        }
     }
 
 }
@@ -1179,5 +1250,7 @@ interface CartItem {
     require_review:boolean,
     order_value:number,
     applied_proccess_dicount:number,
-    thumbnail?:string
+    thumbnail?:string,
+    model_is_fit:boolean,
+    is_metrics_error:boolean
 }

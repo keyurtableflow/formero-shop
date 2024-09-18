@@ -41,7 +41,8 @@
                                                                         <img [src]="model?.thumbnail" alt="">
                                                                     </div>
                                                                 </td>
-                                                                <td *ngIf="!isAllfieldDisabled" class="p-4 pr-0 border-blue-gray-50 text-right"
+                                                                <td *ngIf="!isAllfieldDisabled"
+                                                                    class="p-4 pr-0 border-blue-gray-50 text-right"
                                                                     colspan="2">
                                                                     <span class="ml-3 leading-4 sm:mr-4">
                                                                         <button mat-flat-button class="p-0" (click)="
@@ -73,29 +74,40 @@
                                                                             <!-- {{model | json}} -->
                                                                             <div class="text-md underline mt-2 flex items-center"
                                                                                 *ngIf="
-                                                                                    model.modelWallThickness
+                                                                                    model?.require_review || !model?.instant_quote
                                                                                 ">
                                                                                 <mat-icon
                                                                                     class="icon-size-5 text-yellow-400 mr-1"
                                                                                     [svgIcon]="
                                                                                         'mat_solid:warning_amber'
                                                                                     "></mat-icon>
-                                                                                Model wall thickness too thin
+                                                                                The selected process will require a
+                                                                                review by the team at Formero.
                                                                             </div>
-                                                                            <div class="require_review_container" *ngIf="model.require_review">
-                                                                                <div
-                                                                                class="wroning-msg bg-white p-2 border border-[#FFB200] rounded-[4px] inline-block mt-2">
-                                                                                <p class="text-[14px] leading-[20px] text-[#222B4E]">
-                                                                                    <mat-icon
-                                                                                        class="warning-icon min-h-[18px] h-[18px]"
-                                                                                        svgIcon="mat_outline:warning_amber"
-                                                                                    ></mat-icon>
-                                                                                    <span>The selected process will require a review by the team at Formero.</span>
-                                                                                </p>
+                                                                            <div class="text-md underline mt-2 flex items-center"
+                                                                                *ngIf="
+                                                                                    model?.is_metrics_error
+                                                                                ">
+                                                                                <mat-icon
+                                                                                    class="icon-size-5 text-yellow-400 mr-1"
+                                                                                    [svgIcon]="
+                                                                                        'mat_solid:warning_amber'
+                                                                                    "></mat-icon>
+                                                                                The model metrics can't be determined.
                                                                             </div>
+                                                                            <div class="text-md underline mt-2 flex items-center"
+                                                                                *ngIf="
+                                                                                    !model?.model_is_fit
+                                                                                ">
+                                                                                <mat-icon
+                                                                                    class="icon-size-5 text-yellow-400 mr-1"
+                                                                                    [svgIcon]="
+                                                                                        'mat_solid:warning_amber'
+                                                                                    "></mat-icon>
+                                                                                The model can't fit into printer due to
+                                                                                bigger size.
                                                                             </div>
                                                                         </div>
-                                                                          
                                                                         <!-- <div class="d-flex">
                                                                             <span>{{
                                                                                 model.price /
@@ -113,13 +125,13 @@
                                                                         <li>
                                                                             Process:
                                                                         </li>
-                                                                        <li>
+                                                                        <li *ngIf="!model?.require_review ">
                                                                             Material:
                                                                         </li>
-                                                                        <li>
+                                                                        <li *ngIf="!model?.require_review ">
                                                                             Finish:
                                                                         </li>
-                                                                        <li>
+                                                                        <li *ngIf="!model?.require_review ">
                                                                             Extras:
                                                                         </li>
                                                                     </ul>
@@ -135,7 +147,7 @@
                                                                             "-"
                                                                             }}
                                                                         </li>
-                                                                        <li>
+                                                                        <li *ngIf="!model?.require_review ">
                                                                             {{
                                                                             model
                                                                             ?.materialData
@@ -143,7 +155,7 @@
                                                                             "-"
                                                                             }}
                                                                         </li>
-                                                                        <ul>
+                                                                        <ul *ngIf="!model?.require_review ">
                                                                             <ng-container *ngFor="
                                                                                     let item of model.finishesData
                                                                                 ">
@@ -155,7 +167,7 @@
                                                                             </ng-container>
                                                                         </ul>
 
-                                                                        <ul>
+                                                                        <ul *ngIf="!model?.require_review ">
                                                                             <ng-container *ngFor="
                                                                                     let item of model.extrasData
                                                                                 ">
@@ -178,7 +190,8 @@
                                                                             <div class="quantity-form">
                                                                                 <input
                                                                                     class="quantity w-20 h-12 border rounded text-center"
-                                                                                    type="number" name="quantity" [disabled]="isAllfieldDisabled"
+                                                                                    type="number" name="quantity"
+                                                                                    [disabled]="isAllfieldDisabled"
                                                                                     [value]="
                                                                                         model.quantity
                                                                                     " min="1" />
@@ -201,11 +214,11 @@
                                                                     style="
                                                                         padding-top: 25px;
                                                                     ">
-                                                                    <span *ngIf="isProcessInstantQuote" class="text-md font-bold">{{
-                                                                        model.price
-                                                                        | currency
+                                                                    <span class="text-md font-bold">{{
+                                                                        !isProcessInstantQuote ||
+                                                                        model?.is_metrics_error || !model?.model_is_fit
+                                                                        ? "TBD" : model.price | currency
                                                                         }}</span>
-                                                                    <span *ngIf="!isProcessInstantQuote" class="text-md font-bold">TBD</span>
                                                                 </td>
                                                             </tr>
                                                         </tbody>
@@ -305,7 +318,7 @@
                                     Comma-separate multiple email addresses.
                                 </p>
                                 <mat-form-field class="w-full mt-2 fuse-mat-dense">
-                                    <input  matInput [formControlName]="'additional_email'"
+                                    <input matInput [formControlName]="'additional_email'"
                                         placeholder="Enter an email..." />
                                 </mat-form-field>
                             </div>
@@ -584,9 +597,9 @@
                     <div class="flex flex-col -ml-2 pt-3 border-t" *ngIf="!localPickup">
                         <ng-container *ngIf="!isAllfieldDisabled">
                             <mat-checkbox class="mb-3 mt-4" [(ngModel)]="isBillingAddressSame"
-                            (change)="onBillingAddressChange($event)" [color]="'primary'">
+                                (change)="onBillingAddressChange($event)" [color]="'primary'">
                                 <span class="font-bold">Billing address same as order delivery
-                                details</span>
+                                    details</span>
                             </mat-checkbox>
                         </ng-container>
                     </div>
@@ -688,7 +701,8 @@
                     </div>
                     <div class="flex flex-col flex-auto mt-2 overflow-x-auto">
                         <mat-form-field class="w-full">
-                            <textarea [disabled]="isAllfieldDisabled" matInput placeholder="Put your notes here if necessary (link allowed)"
+                            <textarea [disabled]="isAllfieldDisabled" matInput
+                                placeholder="Put your notes here if necessary (link allowed)"
                                 [(ngModel)]="notes"></textarea>
                         </mat-form-field>
                     </div>
@@ -702,7 +716,8 @@
                                     <mat-icon svgIcon="heroicons_outline:paper-clip" class="mr-1"></mat-icon>
                                     <a (click)="openDocument(doc.document_link)" class="underline cursor-pointer">{{
                                         doc.document_name }}</a>
-                                    <button *ngIf="!isAllfieldDisabled" mat-icon-button (click)="removeDocument(i)"><mat-icon class="icon-size-5"
+                                    <button *ngIf="!isAllfieldDisabled" mat-icon-button
+                                        (click)="removeDocument(i)"><mat-icon class="icon-size-5"
                                             svgIcon="feather:trash"></mat-icon></button>
                                 </li>
                             </ng-container>
@@ -732,7 +747,8 @@
                             </div>
 
                             <div class="mt-2" *ngIf="!isNewProject">
-                                <p class="underline" *ngIf="!isAllfieldDisabled" (click)="onNewProject()">Create a new project</p>
+                                <p class="underline" *ngIf="!isAllfieldDisabled" (click)="onNewProject()">Create a new
+                                    project</p>
                             </div>
                             <div class="w-1/4 mt-2">
                                 <mat-form-field class="w-full col-lg-6">
@@ -775,13 +791,13 @@
 
         <div class="px-2 col-span-12 lg:col-span-4 xl:col-span-3 od__side_invoice mt-4">
             <div class="sm:col-span-6 flex flex-col flex-auto p-6 bg-card shadow overflow-hidden">
-                <div *ngIf="isOrderValueMatch && isProcessInstantQuote" class="mt-0">
+                <div *ngIf="isProcessInstantQuote && !isMtericOrFitSizeError" class="mt-0">
                     <div class="flex justify-between">
                         <p for="Price" class="text-xl font-bold mb-4">
                             Summary
                         </p>
                         <label class="text-xl font-bold">{{
-                            totalCost  | currency
+                            totalCost | currency
                             }}</label>
                     </div>
                     <div class="flex justify-between mb-2">
@@ -794,7 +810,7 @@
                     <div class="flex justify-between mb-2">
                         <span class="text-md font-bold text-slate-500">Promotion</span>
                         <span class="text-md font-bold text-slate-500">-{{
-                            promotionCost  + processAppliedCost | currency
+                            promotionCost + processAppliedCost | currency
                             }}</span>
                     </div>
                     <div class="flex justify-between mb-2">
@@ -806,7 +822,7 @@
                     <div class="flex justify-between mb-2">
                         <span class="text-md font-bold text-slate-500">Subtotal</span>
                         <span class="text-md font-bold text-slate-500">{{
-                            subTotalCost  | currency
+                            subTotalCost | currency
                             }}</span>
                     </div>
 
@@ -834,12 +850,14 @@
                                         [svgIcon]="'mat_solid:warning_amber'"></mat-icon>
                                     Promotion code invalid!</mat-error>
                             </mat-form-field>
-                            <button *ngIf="isPromotionApplied" class="fuse-alert-dismiss-button" mat-icon-button (click)="onDeletePromo()">
+                            <button *ngIf="isPromotionApplied" class="fuse-alert-dismiss-button" mat-icon-button
+                                (click)="onDeletePromo()">
                                 <mat-icon class="text-red-400" [svgIcon]="'feather:trash'"></mat-icon>
                             </button>
                         </div>
 
-                        <button *ngIf="!isPromotionApplied" (click)="onValidatePromo()" class="btn w-full rounded p-2 mt-2 flex justify-center">
+                        <button *ngIf="!isPromotionApplied" (click)="onValidatePromo()"
+                            class="btn w-full rounded p-2 mt-2 flex justify-center">
                             <span class="font-semibold">Apply promotion</span>
                             <!-- <mat-spinner class="w-5 h-5"></mat-spinner> -->
                         </button>
@@ -850,21 +868,26 @@
                     <div class="mt-6 flex w-full gap-3">
                         <!-- Submit button with Angular Material and Tailwind CSS -->
                         <div class="w-1/2">
-                          <button (click)="submit()" mat-flat-button color="primary" class="w-full text-[#222B4E] btn-theme rounded p-3 font-semibold">
-                            <span>Finalise quote</span>
-                          </button>
+                            <button (click)="submit()" mat-flat-button color="primary"
+                                class="w-full text-[#222B4E] btn-theme rounded p-3 font-semibold">
+                                <span>Finalise quote</span>
+                            </button>
                         </div>
 
                         <!-- Save & Exit button with Angular Material and Tailwind CSS -->
                         <div class="w-1/2">
-                          <button  (click)="onSaveAndExit()" class="w-full  border border-[#00E0AC] h-full text-[1em] font-bold leading-[1.3em] text-[#222B4E] rounded-md">
-                            Save & exit
-                          </button>
+                            <button (click)="onSaveAndExit()"
+                                class="w-full  border border-[#00E0AC] h-full text-[1em] font-bold leading-[1.3em] text-[#222B4E] rounded-md">
+                                Save & exit
+                            </button>
                         </div>
-                      </div>
+                    </div>
+                    <P *ngIf="!isOrderValueMatch" class="mt-2" >
+                        Your order doesn't meet the minimum order value and will require a review.
+                    </P>
                 </div>
 
-               <div *ngIf="!isOrderValueMatch || !isProcessInstantQuote" class="mt-0">
+                <div *ngIf="!isProcessInstantQuote || isMtericOrFitSizeError" class="mt-0">
                     <div class="flex justify-between">
                         <p for="Price" class="text-xl font-bold mb-4">
                             Summary
@@ -872,7 +895,8 @@
 
                     <div class="mt-2">
 
-                        <p>An instant quote is unavailable at the moment as your cart contains models or processes that require a review.</p>
+                        <p>An instant quote is unavailable at the moment as your cart contains models or processes that
+                            require a review.</p>
                     </div>
 
                     <div class="mt-2">
@@ -884,25 +908,31 @@
                     <div class="mt-6 flex w-full gap-3">
                         <!-- Submit button with Angular Material and Tailwind CSS -->
                         <div class="w-1/2">
-                          <button (click)="submit()" mat-flat-button color="primary" class="w-full text-[#222B4E] btn-theme rounded p-3 font-semibold">
-                            <span *ngIf="!isAllfieldDisabled">Request quote</span>
-                            <span *ngIf="isAllfieldDisabled">Quote inreview</span>
-                          </button>
+                            <button (click)="submit()" mat-flat-button color="primary"
+                                class="w-full text-[#222B4E] btn-theme rounded p-3 font-semibold">
+                                <span *ngIf="!isAllfieldDisabled">Request quote</span>
+                                <span *ngIf="isAllfieldDisabled">Quote inreview</span>
+                            </button>
                         </div>
 
                         <!-- Save & Exit button with Angular Material and Tailwind CSS -->
                         <div class="w-1/2">
-                          <button  (click)="onSaveAndExit()" class="w-full  border border-[#00E0AC] h-full text-[1em] font-bold leading-[1.3em] text-[#222B4E] rounded-md">
-                            Save & exit
-                          </button>
+                            <button (click)="onSaveAndExit()"
+                                class="w-full  border border-[#00E0AC] h-full text-[1em] font-bold leading-[1.3em] text-[#222B4E] rounded-md">
+                                Save & exit
+                            </button>
                         </div>
-                      </div>
+                    </div>
 
-                      <div class="mt-6">
+                    <div *ngIf="!isProcessInstantQuote" class="mt-6">
                         <p class="text-slate-400">
-                           An instant quote is not possible as your cart contains models or processes that require a review.
+                            An instant quote is not possible as your cart contains models or processes that require a
+                            review.
                         </p>
                     </div>
+                    <P *ngIf="!isOrderValueMatch" class="mt-2">
+                        Your order doesn't meet the minimum order value and will require a review.
+                    </P>
                 </div>
 
             </div>

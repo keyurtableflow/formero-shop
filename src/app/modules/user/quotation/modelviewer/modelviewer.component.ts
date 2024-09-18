@@ -58,6 +58,7 @@ export class ModelviewerComponent {
     @Input() files: any;
     @Input() degree: number = 270;
     @Input() printerSize: { X: number; Y: number; Z: number };
+    @Input() errors: {isMetricError:boolean,model_is_fit:boolean} ;
 
     @Output() onCoordinatePosition = new EventEmitter<any>();
     @Output() thumbnail = new EventEmitter<any>();
@@ -575,7 +576,6 @@ export class ModelviewerComponent {
         this.renderer.render(this.scene, this.camera);
     }
 
-    review_require:boolean = false
     getFileInformation(fileUrl: string) {
         const name = fileUrl.split('/').pop()
         this._fileManagementService.getFileImformation(name).subscribe((response) => {
@@ -589,24 +589,6 @@ export class ModelviewerComponent {
                 surfaceArea: response.surface_area,
                 errors: response.errors
             };
-            console.log("xxxxxxxxxxx",response)
-            console.log(this.volumeData.coordinates,"printerSize",this.printerSize)
-
-            this.review_require = false;
-
-        // Check each condition and set review_require to true if any condition is true
-        if (this.volumeData.coordinates.x < this.printerSize.X) {
-            this.review_require = true;
-        }
-
-        if (this.volumeData.coordinates.y < this.printerSize.Y) {
-            this.review_require = true;
-        }
-
-        if (this.volumeData.coordinates.z < this.printerSize.Z) {
-            this.review_require = true;
-        }
-
             this.onCoordinatePosition.emit(this.volumeData);
         });
     }

@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { Router } from '@angular/router';
 import { AuthService } from 'app/core/auth/auth.service';
+import { StepService } from 'app/core/services/step.service';
 import { UserService } from 'app/core/user/user.service';
 import { Subject, takeUntil } from 'rxjs';
 
@@ -32,7 +33,8 @@ export class UserComponent implements OnInit, OnDestroy {
         private _changeDetectorRef: ChangeDetectorRef,
         private _router: Router,
         private _userService: UserService,
-        private _authService: AuthService
+        private _authService: AuthService,
+        private _steperService : StepService
     ) {
     }
 
@@ -63,11 +65,16 @@ export class UserComponent implements OnInit, OnDestroy {
     signOut(): void {
         this._authService.signOut().subscribe((result: any) => {
             localStorage.clear()
+            this._steperService.resetSteps();
             this._router.navigate(['/sign-out']);
         },(error : any) => {
             if(error.status == 401){
                 this._router.navigateByUrl('/sign-in')
             }
         })
+    }
+
+    onAccount():void {
+        this._router.navigate(['/my-account']);
     }
 }

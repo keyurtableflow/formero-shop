@@ -82,6 +82,7 @@ export const appRoutes: Route[] = [
             {path: 'project-wizard', loadChildren: () => import('app/modules/user/project-wizard/project-wizard.routes')},
             {path: 'quotation', loadChildren: () => import('app/modules/user/quotation/quotation.routes')},
             {path: 'upload-models', loadChildren: () => import('app/modules/user/upload-models/upload-models.routes')},
+            {path: 'my-account', loadChildren: () => import('app/modules/account/my-account/my-account.routes')},
             {path: 'create-order',canActivate: [StepGuard], data: { stepIndex: 1 }, loadChildren: () => import('app/modules/user/create-order/create-order.routes')},
             {path: 'order-details',canActivate: [StepGuard], data: { stepIndex: 2 }, loadChildren: () => import('app/modules/user/order-details/order-details.routes')},
             {path: 'confirmation',canActivate: [StepGuard], data: { stepIndex: 3 }, loadChildren: () => import('app/modules/user/confirmation/confirmation.routes')},
