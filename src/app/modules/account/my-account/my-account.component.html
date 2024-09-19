@@ -6,7 +6,7 @@
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
-            <div class="mt-2 border-2 p-3 border-[#00E0AC] rounded-sm bg-[#00E0AC]">
+            <div class="mt-2 border-2 p-3 border-[#00E0AC] rounded-sm bg-[#00E0AC]" (click)="redirectOrder()">
                 <p>
                     <mat-icon class="icon-size-5 text-black mr-2" [svgIcon]="'feather:arrow-up-circle'"></mat-icon>
                 </p>
@@ -28,56 +28,75 @@
         </div>
     </div>
 
-    <!-- Centered content on all sides -->
-    <div *ngIf="false" class="w-full flex-grow flex flex-col justify-center items-center overflow-hidden">
-        <p class="flex justify-center">
-            <mat-icon class="icon-size-14 text-[#222B4E] mr-2" [svgIcon]="'feather:star'"></mat-icon>
-        </p>
-        <p class="flex justify-center text-2xl font-bold mt-2">No activity to view yet</p>
-        <p class="flex justify-center text-xl mt-2">Create a new quote or order to get started</p>
-    </div>
-
-
     <div class="w-full h-full bg-white mt-4 p-6">
         <div class="flex justify-between">
             <span class="text-xl font-bold">Activity</span>
-            <span class="text-md underline cursor-pointer flex items-center">Past 6 months <mat-icon
+            <span class="text-md underline cursor-pointer flex items-center" [matMenuTriggerFor]="menu">Past 6 months <mat-icon
                     class="icon-size-4 text-[#222B4E] ml-2" [svgIcon]="'feather:chevron-down'"></mat-icon></span>
         </div>
 
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="onSelect(1)">1 month</button>
+            <button mat-menu-item (click)="onSelect(2)">2 months</button>
+            <button mat-menu-item (click)="onSelect(3)">3 months</button>
+            <button mat-menu-item (click)="onSelect(6)">6 months</button>
+            <button mat-menu-item (click)="onSelect(12)">12 months</button>
+        </mat-menu>
+
         <div class="mt-4">
             <ng-container *ngFor="let status of filterStatus">
-                <!-- <span class="border-2 bg-[rgba(0,224,172,0.05)] border-[#00E0AC] rounded-sm p-2">{{status}}</span> -->
-                <span class="border  rounded-sm p-2">{{status}}</span>
+                <span class="border  rounded-sm p-2" (click)="filterActivity(status)"
+                [ngClass]="{
+                    'border-2 bg-[rgba(0,224,172,0.05)] border-[#00E0AC]': status === selectedStatus,
+                    'border rounded-sm p-2': true
+                }"
+                >{{status}}</span>
             </ng-container>
         </div>
 
-        <div class="mt-4 w-full">
+        <div *ngIf="cartItems.length"  class="mt-4 w-full">
             <!-- Responsive Table Wrapper -->
             <div class="max-h-[440px] overflow-y-auto overflow-x-auto mt-4">
                 <table class="min-w-full border-collapse border border-gray-200">
                     <tbody>
-                        <ng-container *ngFor="let order of orders">
+                        <ng-container *ngFor="let order of cartItems  | slice:0:visibleItems">
                             <tr class="h-16 border">
-                                <td class="px-4 py-2 text-left text-md font-medium text-gray-900 whitespace-nowrap">{{
-                                    order?.id }}</td>
+                                <td class="px-4 py-2 text-left text-md font-medium text-gray-900 whitespace-nowrap">-</td>
 
+
+                                <!-- <td class="px-4 py-2 text-left text-md whitespace-nowrap" *ngFor="let thumbnail of order.items">
+                                    <div class="relative flex items-center">
+                                            <img src="{{ thumbnail.thumbnail }}" alt="" srcset="" class="max-w-14 max-h-14" />
+                                        <span class="ml-2 text-gray-500 text-lg">+ {{order?.url}}</span>
+                                      </div>
+                                </td> -->
 
                                 <td class="px-4 py-2 text-left text-md whitespace-nowrap">
                                     <div class="relative flex items-center">
-                                        <div class="w-16 h-16 bg-gray-100 rounded-md shadow-md z-30"></div>
-                                        <div class="-ml-4 w-16 h-16 bg-gray-100 rounded-md shadow-md z-20"></div>
-                                        <div class="-ml-4 w-16 h-16 bg-gray-100 rounded-md shadow-md"></div>
-                                        <span class="ml-2 text-gray-500 text-lg">+ {{order?.url}}</span>
-                                      </div>
-                                </td>
+                                      <!-- Display only the first 3 thumbnails -->
+                                      <ng-container *ngFor="let thumbnail of order.items | slice:0:4">
+                                        <img class="max-w-14 max-h-14 pr-1" [src]="thumbnail.thumbnail">
+                                      </ng-container>
+
+                                      <!-- Show the remaining count if there are more than 3 items -->
+                                      <span class="ml-2 text-gray-500 text-lg" *ngIf="order.items.length > 4">
+                                        + {{ order.items.length - 4 }} more
+                                      </span>
+                                    </div>
+                                  </td>
 
 
-                                <td class="px-4 py-2 text-left text-md  whitespace-nowrap">{{ order?.parts }}</td>
-                                <td class="px-4 py-2 text-left text-md  whitespace-nowrap">{{ order?.status }}</td>
+
+                                <td class="px-4 py-2 text-left text-md  whitespace-nowrap">{{ order?.items.length }}</td>
+                                <td class="px-4 py-2 text-left text-md  whitespace-nowrap">{{ order?.quotation_status }}</td>
                                 <td class="px-4 py-2 text-left text-md  whitespace-nowrap">{{ order?.date | date }}</td>
-                                <td class="px-4 py-2 text-left text-md  whitespace-nowrap"></td>
-                                <td class="px-4 py-2 text-left text-md whitespace-nowrap">{{ order?.price }}</td>
+                                <td class="px-4 py-2 text-left text-md  whitespace-nowrap">
+                                    <button (click)="viewRedirection(order?.quotation_status)"  class="bg-[#00E0AC] border-View-action w-3/4 h-[52px] text-[1em] font-bold leading-[1.3em] text-[#222B4E] rounded-md">
+                                        View
+                                    </button>
+                                </td>
+                                <td class="px-4 py-2 text-left text-md whitespace-nowrap">{{ order?.total_amount?.$numberDecimal != 0 ? (order?.total_amount?.$numberDecimal | number: '2.2-2') : order?.total_amount?.$numberDecimal }}
+                                </td>
                             </tr>
                         </ng-container>
                     </tbody>
@@ -85,9 +104,20 @@
             </div>
         </div>
 
-        <div class="mt-4">
-            <div class="w-full h-10 border border-[#00E0AC] text-center p-2 font-bold">Show more</div>
+        <!-- Centered content on all sides -->
+        <div *ngIf="cartItems.length === 0"
+            class="w-full flex-grow flex flex-col justify-center items-center overflow-hidden p-5">
+            <p class="flex justify-center">
+                <mat-icon class="icon-size-14 text-[#222B4E] mr-2" [svgIcon]="'feather:star'"></mat-icon>
+            </p>
+            <p class="flex justify-center text-2xl font-bold mt-2">No activity to view yet</p>
+            <p class="flex justify-center text-xl mt-2">Create a new quote or order to get started</p>
+        </div>
+
+        <div class="mt-4" *ngIf="visibleItems < cartItems.length">
+            <div class="w-full h-10 border border-[#00E0AC] text-center p-2 font-bold" (click)="showAllItems()">Show more</div>
         </div>
 
     </div>
+
 </div>

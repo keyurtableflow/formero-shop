@@ -60,6 +60,9 @@ export class QuotationService {
         return this._httpClient.get<any>(this.apiUrl + `quotation/${id}`, this.requestOptions);
     }
 
+    getQuotation(url): Observable<any> {
+        return this._httpClient.get<any>(this.apiUrl + `quotation` + url, this.requestOptions);
+    }
     deleteQuotation(id: any): Observable<any> {
         return this._httpClient.delete<any>(this.apiUrl + `quotation/${id}`, this.requestOptions);
     }
