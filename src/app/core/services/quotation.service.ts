@@ -92,4 +92,9 @@ export class QuotationService {
         return this._httpClient.post<any>(this.apiUrl + `quotation/generate-pdf/` + id, '', this.requestOptions);
     }
 
+
+    getPayandPlace(url): Observable<any> {
+        return this._httpClient.post<any>(this.apiUrl + `order` , url, this.requestOptions);
+    }
+
 }
